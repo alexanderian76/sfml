@@ -9,8 +9,8 @@ int ObjectController::checkCollision(Sprite sprite, int xPadding, int yPadding, 
     int sign = 1;
     if(sprite.getTextureRect().width < 0)
         sign = -1;
-    IntRect spriteRect(Vector2i(sprite.getPosition().x + xPadding, sprite.getPosition().y - yPadding), Vector2i(abs(sprite.getTextureRect().width) - 2 * xPadding, sprite.getTextureRect().height + yPadding));
-    IntRect spriteRectNext(Vector2i(sprite.getPosition().x + xPadding + sign * (1 - abs(ySpeed)), sprite.getPosition().y - yPadding + ySpeed), Vector2i(abs(sprite.getTextureRect().width) - 2 * xPadding, sprite.getTextureRect().height + yPadding));
+    IntRect spriteRect(Vector2i(sprite.getPosition().x + xPadding, sprite.getPosition().y + yPadding), Vector2i(abs(sprite.getTextureRect().width) - 2 * xPadding, sprite.getTextureRect().height - yPadding));
+    IntRect spriteRectNext(Vector2i(sprite.getPosition().x + xPadding + sign * (1 - abs(ySpeed)), sprite.getPosition().y + yPadding + ySpeed), Vector2i(abs(sprite.getTextureRect().width) - 2 * xPadding, sprite.getTextureRect().height - yPadding));
     
    // cout << spriteRect.left << ", " << spriteRect.width << endl; 
     if(this->rect.intersects(spriteRect) || this->rect.intersects(spriteRectNext))
