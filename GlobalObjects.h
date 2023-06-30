@@ -11,7 +11,7 @@
 class GlobalObjects
 {
 public:
-    inline static ObjectController* objects = (ObjectController *)malloc(sizeof(ObjectController) * 1);
+    inline static ObjectController* objects = (ObjectController *)calloc(1, sizeof(ObjectController));
     inline static int objectsCount = 0;
 };
 

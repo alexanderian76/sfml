@@ -8,7 +8,9 @@ Sprite PlayerController::DrawPlayer(Clock clock)
     int j = clock.getElapsedTime().asSeconds() / 0.07f;
     Sprite sprite;
     sprite.setPosition(x, y);
+    
     int collisionsCount = 0;
+   // cout << j << endl;
     switch (motion)
     {
     case 0:
@@ -31,7 +33,7 @@ Sprite PlayerController::DrawPlayer(Clock clock)
                 collisionsCount++;
         }
         if (collisionsCount == 0)
-            moveX(0.1);
+            moveX(1);
         break;
     case 3:
         sprite.setTexture(texturesRun[j % 8]);
@@ -45,7 +47,7 @@ Sprite PlayerController::DrawPlayer(Clock clock)
                 collisionsCount++;
         }
         if (collisionsCount == 0)
-            moveX(-0.1);
+            moveX(-1);
         break;
     case 4:
         sprite.setTexture(texturesRun[j % 8]);
@@ -60,7 +62,7 @@ Sprite PlayerController::DrawPlayer(Clock clock)
                 collisionsCount++;
         }
         if (collisionsCount == 0)
-            moveY(-0.1);
+            moveY(-1);
         break;
     case 5:
         sprite.setTexture(texturesRun[j % 8]);
@@ -76,11 +78,12 @@ Sprite PlayerController::DrawPlayer(Clock clock)
                 collisionsCount++;
         }
         if (collisionsCount == 0)
-            moveY(0.1);
+            moveY(1);
         break;
     default:
         break;
     }
+    
     // cout << GlobalObjects::objects[1].checkCollision(sprite, xPadding, yPadding) << endl;
     if (motion == 1 && j % 11 == 10)
         this->setMotion(0);

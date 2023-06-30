@@ -29,7 +29,7 @@ int main()
     sound.setBuffer(buffer);
     sound.play();
     
-    RenderWindow appWindow(VideoMode(1600, 1000, 64), "Bubble sort");
+    RenderWindow appWindow(VideoMode(1600, 1000, 8), "Bubble sort");
     
     int j = 0;
     Event appEvent;
@@ -46,11 +46,11 @@ int main()
     ObjectController obj1(0, 600, 50, 200);
     obj.check = 1;
     GlobalObjects::objects[0] = obj;
-    GlobalObjects::objects = (ObjectController *)realloc(GlobalObjects::objects, sizeof(ObjectController) * 3);
+    GlobalObjects::objects = (ObjectController *)realloc(GlobalObjects::objects, sizeof(ObjectController) * 2);
     GlobalObjects::objects[1] = obj1;
     GlobalObjects::objectsCount = 2;
     srand(time(NULL));
-    // appWindow.setFramerateLimit(60);
+    appWindow.setFramerateLimit(60);
     while (appWindow.isOpen())
     {
         if(sound.getStatus() == Sound::Status::Stopped)
@@ -121,7 +121,7 @@ int main()
                   //  player.setMotion(0);
                 }
                 
-               std::cout << appEvent.key.code << std::endl;
+             //  std::cout << appEvent.key.code << std::endl;
                 break;
 
             // we don't process other types of events
