@@ -22,7 +22,6 @@ public:
         texturesIdle = (Texture *)calloc(8, sizeof(Texture));
         for (int i = 0; i < 8; i++)
         {
-            //cout << texturesIdle[i].loadFromFile("./01_idle/idle_" + to_string(i + 1) + ".png") << endl;
             texturesIdle[i].loadFromFile("./01_idle/idle_" + to_string(i + 1) + ".png");
         }
         cout << texturesIdle[1].getSize().x << endl;
