@@ -21,6 +21,7 @@ public:
     int checkCollision(Sprite, int xPadding, int yPadding, int ySpeed);
     Sprite drawObject();
     int check = 0;
+    Color color;
     ~ObjectController()
     {
         x = NULL;
@@ -30,6 +31,6 @@ public:
 private:
     IntRect rect;
     int x, y, width, height;
-    Color color;
+    
 
 };
