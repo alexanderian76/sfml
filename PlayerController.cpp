@@ -7,6 +7,7 @@ const Texture &PlayerController::DrawPlayer(Clock clock, Sprite *sprite)
 {
     int j = clock.getElapsedTime().asSeconds() / 0.07f;
     //  std::cout << j << std::endl;
+
     //  cout << playerRect.size.x << ", " << playerRect.size.y << ": " << j << endl;
     Texture texture;
 
@@ -49,7 +50,7 @@ const Texture &PlayerController::DrawPlayer(Clock clock, Sprite *sprite)
         //  sprite->setTextureRect(playerRect);
         for (int i = 0; i < GlobalObjects::objectsCount; i++)
         {
-            if (GlobalObjects::objects[i].checkCollision(*sprite, xPadding, yPadding, 0))
+            if (GlobalObjects::objects[i].checkCollision(sprite, xPadding, yPadding, 0, 1))
                 collisionsCount++;
         }
         if (collisionsCount == 0)
@@ -66,7 +67,7 @@ const Texture &PlayerController::DrawPlayer(Clock clock, Sprite *sprite)
 
         for (int i = 0; i < GlobalObjects::objectsCount; i++)
         {
-            if (GlobalObjects::objects[i].checkCollision(*sprite, xPadding, yPadding, 0))
+            if (GlobalObjects::objects[i].checkCollision(sprite, xPadding, yPadding, 0, -1))
                 collisionsCount++;
         }
         if (collisionsCount == 0)
@@ -84,7 +85,7 @@ const Texture &PlayerController::DrawPlayer(Clock clock, Sprite *sprite)
         }
         for (int i = 0; i < GlobalObjects::objectsCount; i++)
         {
-            if (GlobalObjects::objects[i].checkCollision(*sprite, xPadding, yPadding, -1))
+            if (GlobalObjects::objects[i].checkCollision(sprite, xPadding, yPadding, -1, 0))
                 collisionsCount++;
         }
         if (collisionsCount == 0)
@@ -102,7 +103,7 @@ const Texture &PlayerController::DrawPlayer(Clock clock, Sprite *sprite)
         }
         for (int i = 0; i < GlobalObjects::objectsCount; i++)
         {
-            if (GlobalObjects::objects[i].checkCollision(*sprite, xPadding, yPadding, 1))
+            if (GlobalObjects::objects[i].checkCollision(sprite, xPadding, yPadding, 1, 0))
                 collisionsCount++;
         }
         if (collisionsCount == 0)
@@ -112,6 +113,7 @@ const Texture &PlayerController::DrawPlayer(Clock clock, Sprite *sprite)
     default:
         break;
     }
+    cout << collisionsCount << endl;
     if (motion == 1 && j % 11 == 10)
         this->setMotion(0);
     sprite->setPosition(Vector2f(x, y));
@@ -150,7 +152,7 @@ void PlayerController::flipRect(Sprite *sprite)
 
     // sprite->setPosition({direction < 0 ? (bounds.position.x - bounds.size.x) : (bounds.position.x + bounds.size.x), bounds.position.y});
 
-    this->playerRect = IntRect({bounds.position.x, 0}, {bounds.size.x, sprite->getGlobalBounds().size.y});
+    //this->playerRect = IntRect({bounds.position.x, 0}, {bounds.size.x, sprite->getGlobalBounds().size.y});
 
     // sprite->setScale ->setTextureRect(this->playerRect);
     if (sprite->getScale().x > 0 && direction < 0)

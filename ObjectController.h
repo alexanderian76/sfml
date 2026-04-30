@@ -18,7 +18,7 @@ public:
         this->rect = IntRect(Vector2i(x, y), Vector2i(width, height));
         this->color = Color::Blue;
     }
-    int checkCollision(Sprite, int xPadding, int yPadding, int ySpeed);
+    int checkCollision(Sprite*, int xPadding, int yPadding, int ySpeed, int xSpeed);
     Sprite drawObject();
     int check = 0;
     Color color;
