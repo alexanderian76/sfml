@@ -135,9 +135,11 @@ int PlayerController::getMotion()
 }
 void PlayerController::moveX(float speed)
 {
-    if (x + xPadding > 0 && speed < 0)
+    int delta = playerRect.size.x;
+
+    if (x + xPadding > (0 + (direction < 0 ? delta : 0)) && speed < 0)
         this->x = x + speed;
-    if (x + xPadding < 800 && speed > 0)
+    if (x + xPadding < (800 + (direction < 0 ? delta : 0)) && speed > 0)
         this->x = x + speed;
 }
 void PlayerController::moveY(float speed)
