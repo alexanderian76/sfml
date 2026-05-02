@@ -24,9 +24,7 @@ public:
     Color color;
     ~ObjectController()
     {
-        x = NULL;
-        y = NULL;
-
+        
     }
 private:
     IntRect rect;

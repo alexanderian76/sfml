@@ -9,7 +9,7 @@ int ObjectController::checkCollision(Sprite *sprite, int xPadding, int yPadding,
     int sign = 0;
     if (sprite->getScale().x < 0)
         sign = -1;
-        cout << sprite->getPosition().x << endl;
+      //  cout << sprite->getPosition().x << endl;
     IntRect spriteRect(Vector2i(sprite->getGlobalBounds().position.x + xPadding, sprite->getGlobalBounds().position.y + yPadding), Vector2i(sprite->getTextureRect().size.x - 2 * xPadding, sprite->getTextureRect().size.y - yPadding));
     // IntRect spriteRectNext(Vector2i(sprite->getPosition().x - xPadding + sign * (1 - abs(ySpeed)), sprite->getPosition().y + yPadding + ySpeed), Vector2i(abs(sprite->getTextureRect().size.x) - 2 * xPadding, sprite->getTextureRect().size.y - yPadding));
     IntRect spriteRectNext(Vector2i(sprite->getGlobalBounds().position.x + xPadding + xSpeed + abs(ySpeed), sprite->getGlobalBounds().position.y + yPadding + ySpeed + abs(xSpeed)), Vector2i(sprite->getTextureRect().size.x - 2 * xPadding - 2*abs(ySpeed), sprite->getTextureRect().size.y - yPadding - 2*abs(xSpeed)));

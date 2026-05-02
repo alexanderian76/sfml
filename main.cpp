@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <string>
 #include "PlayerController.h"
+#include "./Enemy/EnemySpawner.h"
 
 #include "GlobalObjects.h"
 
@@ -36,11 +37,10 @@ int main()
     ObjectController obj1(0, 600, 50, 200);
     ObjectController obj2(200, 500, 200, 200);
     obj.check = 1;
-    GlobalObjects::objects[0] = obj;
-    GlobalObjects::objects = (ObjectController *)realloc(GlobalObjects::objects, sizeof(ObjectController) * 3);
-    GlobalObjects::objects[1] = obj1;
-    GlobalObjects::objects[2] = obj2;
-    GlobalObjects::objectsCount = 3;
+
+    GlobalObjects::objects.push_back(obj);
+    GlobalObjects::objects.push_back(obj1);
+    GlobalObjects::objects.push_back(obj2);
 
     srand(time(NULL));
     appWindow.setFramerateLimit(60);
@@ -48,7 +48,7 @@ int main()
 
     appWindow.draw(fondo);
 
-    for (int i = 0; i < GlobalObjects::objectsCount; i++)
+    for (int i = 0; i < GlobalObjects::objects.size(); i++)
     {
         appWindow.draw(GlobalObjects::objects[i].drawObject());
     }
@@ -59,6 +59,22 @@ int main()
     texture.loadFromFile("./01_idle/idle_1.png");
     Texture t("./01_idle/idle_1.png");
     Sprite *sprite = new Sprite(t);
+
+    sprite->setOrigin({sprite->getLocalBounds().size.x / 2, sprite->getLocalBounds().size.y / 2});
+    sprite->setPosition({250, 150});
+    // Загрузка текстуры врага (замените на свой файл)
+    sf::Texture enemyTexture;
+    if (!enemyTexture.loadFromFile("./01_idle/idle_1.png"))
+    {
+        std::cerr << "Failed to load enemy texture!" << std::endl;
+        return -1;
+    }
+
+    // Создание спавнера врагов
+    EnemySpawner spawner(enemyTexture);
+    spawner.setSpawnRate(1.5f); // Спавн каждые 1.5 секунды
+    spawner.setMaxEnemies(15);
+
     appWindow.draw(*sprite);
     appWindow.display();
     while (appWindow.isOpen())
@@ -69,98 +85,34 @@ int main()
         appWindow.draw(fondo); // 2. РИСУЕМ фон
 
         // 3. РИСУЕМ все объекты
-        for (int i = 0; i < GlobalObjects::objectsCount; i++)
+        for (int i = 0; i < GlobalObjects::objects.size(); i++)
         {
             appWindow.draw(GlobalObjects::objects[i].drawObject());
         }
 
-        // std::cout << clock.getElapsedTime().asSeconds() << std::endl;
+        // Обновление спавнера
+        spawner.update(clock.getElapsedTime().asSeconds(), *sprite);
+
+        spawner.draw(appWindow);
+
+        // Проверка коллизий с игроком
+        for (auto &enemy : spawner.getEnemies())
+        {
+            if (FloatRect(enemy->getPosition(), {enemy->xPadding, enemy->yPadding}).findIntersection(FloatRect({sprite->getPosition().x + player.direction * (player.xPadding / (player.direction > 0 ? 1 : 2)), sprite->getPosition().y}, {1, player.yPadding / 2})))
+            {
+                // Здесь нужно обрабатывать урон игроку
+                // Например: player.takeDamage(enemy->damage);
+                if (player.isAttack)
+                {
+                    enemy->takeDamage(10);
+                }
+            }
+        }
+
         int collisionsCount = 0;
-        // Texture t("./01_idle/idle_1.png");
 
-   /*     if (player.motion == 0)
-        {
-            // sprite.setTexture(t);
-            if (player.direction == -1)
-            {
-                sprite->setTextureRect(player.playerRect);
-            }
-        }
-        if (player.motion == 1)
-        {
-         //   sprite->setTexture(player.texturesAttack1[j % 11]);
-            if (player.direction == -1)
-            {
-                sprite->setTextureRect(player.playerRect);
-            }
-        }
-        if (player.motion == 2)
-        {
+        player.DrawPlayer(clock, sprite, appWindow);
 
-          //  sprite->setTexture(player.texturesRun[j % 8]);
-            player.direction = 1;
-
-            for (int i = 0; i < GlobalObjects::objectsCount; i++)
-            {
-                if (GlobalObjects::objects[i].checkCollision(*sprite, player.xPadding, player.yPadding, 0))
-                    collisionsCount++;
-            }
-            if (collisionsCount == 0)
-                player.moveX(1);
-        }
-        if (player.motion == 3)
-        {
-          //  sprite->setTexture(player.texturesRun[j % 8]);
-          //  player.direction = -1;
-           // player.flipRect(sprite);
-
-          //  sprite->setTextureRect(player.playerRect);
-
-            for (int i = 0; i < GlobalObjects::objectsCount; i++)
-            {
-                if (GlobalObjects::objects[i].checkCollision(*sprite, player.xPadding, player.yPadding, 0))
-                    collisionsCount++;
-            }
-            if (collisionsCount == 0)
-                player.moveX(-1);
-        }
-        if (player.motion == 4)
-        {
-          //  sprite->setTexture(player.texturesRun[j % 8]);
-            if (player.direction < 0)
-            {
-                player.flipRect(sprite);
-
-                sprite->setTextureRect(player.playerRect);
-            }
-            for (int i = 0; i < GlobalObjects::objectsCount; i++)
-            {
-                if (GlobalObjects::objects[i].checkCollision(*sprite, player.xPadding, player.yPadding, -1))
-                    collisionsCount++;
-            }
-            if (collisionsCount == 0)
-                player.moveY(-1);
-        }
-        if (player.motion == 5)
-        {
-
-           // sprite->setTexture(player.texturesRun[j % 8]);
-            if (player.direction < 0)
-            {
-                player.flipRect(sprite);
-                sprite->setTextureRect(player.playerRect);
-            }
-            for (int i = 0; i < GlobalObjects::objectsCount; i++)
-            {
-                if (GlobalObjects::objects[i].checkCollision(*sprite, player.xPadding, player.yPadding, 1))
-                    collisionsCount++;
-            }
-            if (collisionsCount == 0)
-                player.moveY(1);
-        }*/
-        // cout << "SPrite" << endl;
-        player.DrawPlayer(clock, sprite);
-        appWindow.draw(*sprite);
         appWindow.display();
 
         if (sound.getStatus() == Sound::Status::Stopped)
@@ -192,8 +144,8 @@ int main()
 
                 const auto *keyPressed = appEvent->getIf<sf::Event::KeyPressed>();
 
-              //  std::cout << (keyPressed->scancode == Keyboard::Scancode::A) << std::endl;
-                
+                //  std::cout << (keyPressed->scancode == Keyboard::Scancode::A) << std::endl;
+
                 if (keyPressed->scancode == Keyboard::Scancode::B && player.getMotion() != 1)
                 {
                     clock.restart();

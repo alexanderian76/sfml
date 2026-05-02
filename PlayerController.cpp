@@ -3,42 +3,30 @@
 using namespace sf;
 using namespace std;
 
-const Texture &PlayerController::DrawPlayer(Clock clock, Sprite *sprite)
+const Texture &PlayerController::DrawPlayer(Clock clock, Sprite *sprite, RenderWindow &window)
 {
     int j = clock.getElapsedTime().asSeconds() / 0.07f;
-    //  std::cout << j << std::endl;
 
-    //  cout << playerRect.size.x << ", " << playerRect.size.y << ": " << j << endl;
     Texture texture;
 
-    // cout << texture.getSize().x << "... " << texture.getSize().y << endl;
-    // texture.resize({224, 112});
-    // Sprite sprite(texturesIdle[j % 8]);
-    //  sprite->setTextureRect(IntRect({0, 0}, {224, 112}));
-    // sprite->setPosition({x, y});
     int collisionsCount = 0;
-    // cout << j << endl;
+
     switch (motion)
     {
     case 0:
         texture = texturesIdle[j % 8];
 
         sprite->setTexture(texturesIdle[j % 8]);
-        if (direction == -1)
-        {
-            // sprite->setTextureRect(playerRect);
-            //  texture.resize({playerRect.size.x, playerRect.size.y});
-        }
-        return texture;
+
         break;
     case 1:
         texture = texturesAttack1[j % 11];
         sprite->setTexture(texturesAttack1[j % 11]);
-        if (direction == -1)
-        {
-            // sprite->setTextureRect(playerRect);
-            //  texture.resize({playerRect.size.x, playerRect.size.y});
-        }
+        if (j == 1)
+            isAttack = true;
+        else
+            isAttack = false;
+
 
         break;
     case 2:
@@ -46,9 +34,7 @@ const Texture &PlayerController::DrawPlayer(Clock clock, Sprite *sprite)
         sprite->setTexture(texturesRun[j % 8]);
         direction = 1;
         flipRect(sprite);
-        //  texture.resize({playerRect.size.x, playerRect.size.y});
-        //  sprite->setTextureRect(playerRect);
-        for (int i = 0; i < GlobalObjects::objectsCount; i++)
+        for (int i = 0; i < GlobalObjects::objects.size(); i++)
         {
             if (GlobalObjects::objects[i].checkCollision(sprite, xPadding, yPadding, 0, 1))
                 collisionsCount++;
@@ -62,10 +48,8 @@ const Texture &PlayerController::DrawPlayer(Clock clock, Sprite *sprite)
         sprite->setTexture(texturesRun[j % 8]);
         direction = -1;
         flipRect(sprite);
-        // texture.resize({playerRect.size.x, playerRect.size.y});
-        // sprite->setTextureRect(playerRect);
 
-        for (int i = 0; i < GlobalObjects::objectsCount; i++)
+        for (int i = 0; i < GlobalObjects::objects.size(); i++)
         {
             if (GlobalObjects::objects[i].checkCollision(sprite, xPadding, yPadding, 0, -1))
                 collisionsCount++;
@@ -80,10 +64,8 @@ const Texture &PlayerController::DrawPlayer(Clock clock, Sprite *sprite)
         if (direction < 0)
         {
             flipRect(sprite);
-            //  texture.resize({playerRect.size.x, playerRect.size.y});
-            //   sprite->setTextureRect(playerRect);
         }
-        for (int i = 0; i < GlobalObjects::objectsCount; i++)
+        for (int i = 0; i < GlobalObjects::objects.size(); i++)
         {
             if (GlobalObjects::objects[i].checkCollision(sprite, xPadding, yPadding, -1, 0))
                 collisionsCount++;
@@ -98,10 +80,8 @@ const Texture &PlayerController::DrawPlayer(Clock clock, Sprite *sprite)
         if (direction < 0)
         {
             flipRect(sprite);
-            //    texture.resize({playerRect.size.x, playerRect.size.y});
-            // sprite->setTextureRect(playerRect);
         }
-        for (int i = 0; i < GlobalObjects::objectsCount; i++)
+        for (int i = 0; i < GlobalObjects::objects.size(); i++)
         {
             if (GlobalObjects::objects[i].checkCollision(sprite, xPadding, yPadding, 1, 0))
                 collisionsCount++;
@@ -113,16 +93,24 @@ const Texture &PlayerController::DrawPlayer(Clock clock, Sprite *sprite)
     default:
         break;
     }
-    cout << collisionsCount << endl;
+    //cout << collisionsCount << endl;
     if (motion == 1 && j % 11 == 10)
         this->setMotion(0);
     sprite->setPosition(Vector2f(x, y));
+
+    window.draw(*sprite);
+    sf::RectangleShape healthBar(sf::Vector2f(40, 5));
+    healthBar.setFillColor(sf::Color::Red);
+    healthBar.setPosition({sprite->getPosition().x - 20, sprite->getPosition().y - 30});
+
+    window.draw(healthBar);
+
+    sf::RectangleShape currentHealth(sf::Vector2f(40 * (health / getMaxHealth()), 5));
+    currentHealth.setFillColor(sf::Color::Green);
+    currentHealth.setPosition({sprite->getPosition().x - 20, sprite->getPosition().y - 30});
+    window.draw(currentHealth);
+
     return texture;
-    // cout << GlobalObjects::objects[1].checkCollision(sprite, xPadding, yPadding) << endl;
-
-    // sprite->setPosition(Vector2f(x, y));
-
-    // return texture;
 }
 
 void PlayerController::setMotion(int newMotion)
@@ -135,11 +123,10 @@ int PlayerController::getMotion()
 }
 void PlayerController::moveX(float speed)
 {
-    int delta = playerRect.size.x;
 
-    if (x + xPadding > (0 + (direction < 0 ? delta : 0)) && speed < 0)
+    if (x > 0 && speed < 0)
         this->x = x + speed;
-    if (x + xPadding < (800 + (direction < 0 ? delta : 0)) && speed > 0)
+    if (x < 800 && speed > 0)
         this->x = x + speed;
 }
 void PlayerController::moveY(float speed)
@@ -149,21 +136,13 @@ void PlayerController::moveY(float speed)
 
 void PlayerController::flipRect(Sprite *sprite)
 {
-    std::cout << sprite->getGlobalBounds().size.x << std::endl;
-    sf::FloatRect bounds = sprite->getGlobalBounds();
-
-    // sprite->setPosition({direction < 0 ? (bounds.position.x - bounds.size.x) : (bounds.position.x + bounds.size.x), bounds.position.y});
-
-    //this->playerRect = IntRect({bounds.position.x, 0}, {bounds.size.x, sprite->getGlobalBounds().size.y});
-
-    // sprite->setScale ->setTextureRect(this->playerRect);
     if (sprite->getScale().x > 0 && direction < 0)
     {
-        moveX(bounds.size.x);
+        // moveX(bounds.size.x);
     }
-    else if(sprite->getScale().x < 0 && direction > 0)
+    else if (sprite->getScale().x < 0 && direction > 0)
     {
-        moveX(-bounds.size.x);
+        //  moveX(-bounds.size.x);
     }
     sprite->setScale(Vector2f(direction * 1.f, 1.f));
 }
