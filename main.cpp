@@ -25,7 +25,7 @@ int main()
     int j = 0;
     // Event appEvent;
     Texture fondot;
-    fondot.loadFromFile("fondo1.png");
+    fondot.loadFromFile("696.jpg");
 
     Sprite fondo(fondot);
 
@@ -33,15 +33,19 @@ int main()
     reactange.setFillColor(Color(235, 149, 13));
     PlayerController player;
     Clock clock;
-    ObjectController obj(500, 600, 200, 200);
-    ObjectController obj1(0, 600, 50, 200);
-    ObjectController obj2(200, 500, 200, 200);
+    ObjectController obj(500, 600);
+    ObjectController obj1(0, 600);
+    ObjectController obj2(200, 500);
     obj.check = 1;
 
     GlobalObjects::objects.push_back(obj);
     GlobalObjects::objects.push_back(obj1);
     GlobalObjects::objects.push_back(obj2);
 
+    auto wall = ObjectController::wall(200, 400, 10, false);
+
+    GlobalObjects::objects.insert(GlobalObjects::objects.end(), std::make_move_iterator(wall.begin()), std::make_move_iterator(wall.end()));
+    wall.clear();
     srand(time(NULL));
     appWindow.setFramerateLimit(60);
     appWindow.clear(Color::Black);
@@ -108,7 +112,8 @@ int main()
                 }
             }
         }
-
+      //  cout << "WALL" << endl;
+      //  cout << wall.size() << endl;
         int collisionsCount = 0;
 
         player.DrawPlayer(clock, sprite, appWindow);
@@ -179,5 +184,8 @@ int main()
 
     ////////////////////////////////////////////// ////////////////////////////////////////////// //////////////////////////////////////////////
     delete sprite;
+
+    
+    GlobalObjects::objects.clear();
     return 0;
 }

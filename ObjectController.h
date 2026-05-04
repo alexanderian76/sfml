@@ -9,26 +9,56 @@ using namespace std;
 class ObjectController
 {
 public:
-    ObjectController(int x, int y, int width, int height)
+    ObjectController(int x, int y) : sprite(texture)
     {
         this->x = x;
         this->y = y;
-        this->width = width;
-        this->height = height;
         this->rect = IntRect(Vector2i(x, y), Vector2i(width, height));
+        if (!isTextureLoaded)
+        {
+            texture.loadFromFile("877.jpg");
+            isTextureLoaded = true;
+        }
         this->color = Color::Blue;
+        this->sprite = Sprite(texture);
+        this->sprite.setPosition(Vector2f(x, y));
     }
-    int checkCollision(Sprite*, int xPadding, int yPadding, int ySpeed, int xSpeed);
+    int checkCollision(Sprite *, int xPadding, int yPadding, int ySpeed, int xSpeed);
     Sprite drawObject();
     int check = 0;
     Color color;
+    static std::vector<ObjectController> wall(int startX, int startY, int length, bool isVertical)
+    {
+        std::vector<ObjectController> items;
+
+        int posX = startX;
+        int posY = startY;
+
+        for (int i = 0; i < length; i++)
+        {
+            items.emplace_back(posX, posY);
+            if (isVertical)
+            {
+                posY += 20;
+            }
+            else
+            {
+                posX += 20;
+            }
+        }
+
+        return items;
+    }
     ~ObjectController()
     {
-        
+        cout << "DELETE OBJECT_CONTROLLER" << endl;
+        //  delete sprite;
     }
+
 private:
     IntRect rect;
-    int x, y, width, height;
-    
-
+    int x, y, width = 20, height = 20;
+    static Texture texture;
+    static bool isTextureLoaded;
+    Sprite sprite;
 };
