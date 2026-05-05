@@ -1,3 +1,6 @@
+#ifndef OBJECT_CONTROLLER_H
+#define OBJECT_CONTROLLER_H
+
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <stdio.h>
@@ -27,15 +30,15 @@ public:
     Sprite drawObject();
     int check = 0;
     Color color;
-    static std::vector<ObjectController> wall(int startX, int startY, int length, bool isVertical)
+    static void wall(int startX, int startY, int length, bool isVertical, std::vector<ObjectController> &items)
     {
-        std::vector<ObjectController> items;
 
         int posX = startX;
         int posY = startY;
 
         for (int i = 0; i < length; i++)
         {
+
             items.emplace_back(posX, posY);
             if (isVertical)
             {
@@ -47,7 +50,6 @@ public:
             }
         }
 
-        return items;
     }
     ~ObjectController()
     {
@@ -62,3 +64,5 @@ private:
     static bool isTextureLoaded;
     Sprite sprite;
 };
+
+#endif

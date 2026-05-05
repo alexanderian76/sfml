@@ -10,7 +10,7 @@ const Texture &PlayerController::DrawPlayer(Clock clock, Sprite *sprite, RenderW
     Texture texture;
 
     int collisionsCount = 0;
-
+    isAttack = false;
     switch (motion)
     {
     case 0:
@@ -22,11 +22,8 @@ const Texture &PlayerController::DrawPlayer(Clock clock, Sprite *sprite, RenderW
     case 1:
         texture = texturesAttack1[j % 11];
         sprite->setTexture(texturesAttack1[j % 11]);
-        if (j == 1)
+        if (j == 4)
             isAttack = true;
-        else
-            isAttack = false;
-
 
         break;
     case 2:
@@ -93,7 +90,7 @@ const Texture &PlayerController::DrawPlayer(Clock clock, Sprite *sprite, RenderW
     default:
         break;
     }
-    //cout << collisionsCount << endl;
+    // cout << collisionsCount << endl;
     if (motion == 1 && j % 11 == 10)
         this->setMotion(0);
     sprite->setPosition(Vector2f(x, y));

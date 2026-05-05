@@ -87,6 +87,11 @@ void Enemy::update(float deltaTime, const sf::Sprite &playerSprite)
     sf::Vector2f direction = playerSprite.getPosition() - sprite->getPosition();
     float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
 
+    if(length > 200)
+    {
+        return;
+    }
+
     if (length > 0 && !FloatRect(sprite->getPosition(), {xPadding, yPadding}).findIntersection(FloatRect(playerSprite.getPosition(), {xPadding, yPadding})))
     {
 

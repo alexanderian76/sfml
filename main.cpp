@@ -42,10 +42,13 @@ int main()
     GlobalObjects::objects.push_back(obj1);
     GlobalObjects::objects.push_back(obj2);
 
-    auto wall = ObjectController::wall(200, 400, 10, false);
+    ObjectController::wall(200, 400, 10, false, GlobalObjects::objects);
+    ObjectController::wall(200, 200, 30, true, GlobalObjects::objects);
+    ObjectController::wall(200, 200, 30, false, GlobalObjects::objects);
+    ObjectController::wall(50, 200, 30, true, GlobalObjects::objects);
 
-    GlobalObjects::objects.insert(GlobalObjects::objects.end(), std::make_move_iterator(wall.begin()), std::make_move_iterator(wall.end()));
-    wall.clear();
+   // GlobalObjects::objects.insert(GlobalObjects::objects.end(), std::make_move_iterator(wall.begin()), std::make_move_iterator(wall.end()));
+  //  wall.clear();
     srand(time(NULL));
     appWindow.setFramerateLimit(60);
     appWindow.clear(Color::Black);
