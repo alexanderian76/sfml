@@ -38,17 +38,10 @@ public:
 
     ~Enemy()
     {
-        std::cout << "DELETE Enemy" << std::endl;
+      //  std::cout << "DELETE Enemy" << std::endl;
         delete sprite;
         delete[] texturesRun;
 
-        texturesRun = nullptr;
-        health = NULL;
-        speed = NULL;
-        damage = NULL;
-        attackCooldown = NULL;
-        attackTimer = NULL;
-        isAttack = NULL;
     }
 
 private:

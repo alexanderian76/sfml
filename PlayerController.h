@@ -1,3 +1,4 @@
+#pragma once
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <stdio.h>
@@ -9,6 +10,7 @@ using namespace std;
 
 class PlayerController
 {
+private:
 public:
     PlayerController()
     {
@@ -63,16 +65,10 @@ public:
     static const int yPadding = 60;
     ~PlayerController()
     {
-        cout << "DELETE" << endl;
-        delete texturesAttack1;
-        delete texturesIdle;
-        delete texturesRun;
-        direction = NULL;
-        x = NULL;
-        y = NULL;
-        motion = NULL;
-        currentFrame = NULL;
-    }
+     //   cout << "DELETE" << endl;
+        delete[] texturesAttack1;
+        delete[] texturesIdle;
+        delete[] texturesRun;
 
-private:
+    }
 };

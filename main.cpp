@@ -6,6 +6,11 @@
 #include "PlayerController.h"
 #include "./Enemy/EnemySpawner.h"
 
+#include "./Menu/Menu.h"
+#include "./Menu/Screen.h"
+#include "./Menu/MainMenu.h"
+#include "./Menu/GameScreen.h"
+
 #include "GlobalObjects.h"
 
 // g++ main.cpp -lsfml-graphics -lsfml-network -lsfml-system -lsfml-window -lsfml-audio
@@ -13,14 +18,20 @@ using namespace sf;
 
 int main()
 {
+
     SoundBuffer buffer;
     buffer.loadFromFile("test.wav");
     Sound sound(buffer);
     sound.setBuffer(buffer);
-    sound.setVolume(50);
-    sound.play();
+  //  sound.setVolume(50);
+  //  sound.play();
 
-    RenderWindow appWindow(VideoMode({1600, 1000}, 8), "Bubble sort");
+    RenderWindow appWindow(VideoMode({800, 600}, 8), "Bubble sort");
+
+    //ScreenManager screenManager;
+    std::cout << "HELLO" << std::endl;
+    //  std::unique_ptr<MainMenuScreen> mainMenuScreen = make_unique<MainMenuScreen>();
+    GlobalObjects::screenManager->pushScreen(make_unique<MainMenuScreen>());
 
     int j = 0;
     // Event appEvent;
@@ -31,7 +42,7 @@ int main()
 
     RectangleShape reactange(Vector2f(2, 178));
     reactange.setFillColor(Color(235, 149, 13));
-    PlayerController player;
+    //  PlayerController player;
     Clock clock;
     ObjectController obj(500, 600);
     ObjectController obj1(0, 600);
@@ -47,17 +58,17 @@ int main()
     ObjectController::wall(200, 200, 30, false, GlobalObjects::objects);
     ObjectController::wall(50, 200, 30, true, GlobalObjects::objects);
 
-   // GlobalObjects::objects.insert(GlobalObjects::objects.end(), std::make_move_iterator(wall.begin()), std::make_move_iterator(wall.end()));
-  //  wall.clear();
+    // GlobalObjects::objects.insert(GlobalObjects::objects.end(), std::make_move_iterator(wall.begin()), std::make_move_iterator(wall.end()));
+    //  wall.clear();
     srand(time(NULL));
     appWindow.setFramerateLimit(60);
     appWindow.clear(Color::Black);
 
-    appWindow.draw(fondo);
+    // appWindow.draw(fondo);
 
     for (int i = 0; i < GlobalObjects::objects.size(); i++)
     {
-        appWindow.draw(GlobalObjects::objects[i].drawObject());
+        //    appWindow.draw(GlobalObjects::objects[i].drawObject());
     }
     clock.start();
 
@@ -65,10 +76,10 @@ int main()
     Texture texture;
     texture.loadFromFile("./01_idle/idle_1.png");
     Texture t("./01_idle/idle_1.png");
-    Sprite *sprite = new Sprite(t);
+    //  Sprite *sprite = new Sprite(t);
 
-    sprite->setOrigin({sprite->getLocalBounds().size.x / 2, sprite->getLocalBounds().size.y / 2});
-    sprite->setPosition({250, 150});
+    // sprite->setOrigin({sprite->getLocalBounds().size.x / 2, sprite->getLocalBounds().size.y / 2});
+    // sprite->setPosition({250, 150});
     // Загрузка текстуры врага (замените на свой файл)
     sf::Texture enemyTexture;
     if (!enemyTexture.loadFromFile("./01_idle/idle_1.png"))
@@ -78,117 +89,155 @@ int main()
     }
 
     // Создание спавнера врагов
-    EnemySpawner spawner(enemyTexture);
-    spawner.setSpawnRate(1.5f); // Спавн каждые 1.5 секунды
-    spawner.setMaxEnemies(15);
+    //  EnemySpawner spawner(enemyTexture);
+    //  spawner.setSpawnRate(1.5f); // Спавн каждые 1.5 секунды
+    //  spawner.setMaxEnemies(15);
 
-    appWindow.draw(*sprite);
+    //  appWindow.draw(*sprite);
     appWindow.display();
+
     while (appWindow.isOpen())
     {
 
+        //   appWindow.draw(fondo); // 2. РИСУЕМ фон
+        Time deltaTime = clock.restart();
+        GlobalObjects::screenManager->update(deltaTime);
+
         appWindow.clear(Color::Black); // 1. ОЧИЩАЕМ экран
-
-        appWindow.draw(fondo); // 2. РИСУЕМ фон
-
-        // 3. РИСУЕМ все объекты
-        for (int i = 0; i < GlobalObjects::objects.size(); i++)
-        {
-            appWindow.draw(GlobalObjects::objects[i].drawObject());
-        }
-
-        // Обновление спавнера
-        spawner.update(clock.getElapsedTime().asSeconds(), *sprite);
-
-        spawner.draw(appWindow);
-
-        // Проверка коллизий с игроком
-        for (auto &enemy : spawner.getEnemies())
-        {
-            if (FloatRect(enemy->getPosition(), {enemy->xPadding, enemy->yPadding}).findIntersection(FloatRect({sprite->getPosition().x + player.direction * (player.xPadding / (player.direction > 0 ? 1 : 2)), sprite->getPosition().y}, {1, player.yPadding / 2})))
-            {
-                // Здесь нужно обрабатывать урон игроку
-                // Например: player.takeDamage(enemy->damage);
-                if (player.isAttack)
-                {
-                    enemy->takeDamage(10);
-                }
-            }
-        }
-      //  cout << "WALL" << endl;
-      //  cout << wall.size() << endl;
-        int collisionsCount = 0;
-
-        player.DrawPlayer(clock, sprite, appWindow);
-
+        GlobalObjects::screenManager->draw(appWindow);
+        //  std::cout << "HELLO" << std::endl;
         appWindow.display();
-
-        if (sound.getStatus() == Sound::Status::Stopped)
+        while (const auto event = appWindow.pollEvent())
         {
-            sound.play();
-        }
-        while (const std::optional appEvent = appWindow.pollEvent())
-        {
-
-            if (appEvent->is<Event::Closed>())
-                appWindow.close();
-
-            // window closed
-            if (appEvent->is<sf::Event::Closed>())
+            if (event->is<sf::Event::Closed>())
             {
                 appWindow.close();
             }
-            else if (appEvent->is<Event::KeyReleased>())
+
+            // Передаем события в менеджер экранов
+            GlobalObjects::screenManager->handleInput(*event, appWindow);
+
+            // Специальная обработка для меню
+            if (const auto *keyPressed = event->getIf<sf::Event::KeyPressed>())
             {
-                if (player.getMotion() == 3 || player.getMotion() == 2 || player.getMotion() == 4 || player.getMotion() == 5)
+                if (keyPressed->code == sf::Keyboard::Key::Escape)
                 {
-                    clock.restart();
-                    player.setMotion(0);
+                    if (!GlobalObjects::screenManager->isEmpty())
+                    {
+                        int screenType = GlobalObjects::screenManager->currentScreenType();
+                        GlobalObjects::screenManager->popScreen();
+                        if (screenType == 1)
+                        {
+                            GlobalObjects::screenManager->pushScreen(make_unique<GameScreen>());
+                        }
+                        else
+                        {
+                            GlobalObjects::screenManager->pushScreen(make_unique<MainMenuScreen>());
+                        }
+                        
+                    }
                 }
             }
-            // key pressed
-            else if (appEvent->is<sf::Event::KeyPressed>())
-            {
-
-                const auto *keyPressed = appEvent->getIf<sf::Event::KeyPressed>();
-
-                //  std::cout << (keyPressed->scancode == Keyboard::Scancode::A) << std::endl;
-
-                if (keyPressed->scancode == Keyboard::Scancode::B && player.getMotion() != 1)
-                {
-                    clock.restart();
-                    player.setMotion(1);
-                }
-
-                if (keyPressed->scancode == Keyboard::Scancode::D && player.getMotion() != 2)
-                {
-                    player.setMotion(2);
-                }
-
-                if (keyPressed->scancode == Keyboard::Scancode::A && player.getMotion() != 3)
-                {
-                    player.setMotion(3);
-                }
-
-                if (keyPressed->scancode == Keyboard::Scancode::W && player.getMotion() != 4)
-                {
-                    player.setMotion(4);
-                }
-
-                if (keyPressed->scancode == Keyboard::Scancode::S && player.getMotion() != 5)
-                {
-                    player.setMotion(5);
-                }
-                // std::cout << appEvent << std::endl;
-            }
-            // we don't process other types of events
+            //    std::cout << "EVENT END" << std::endl;
         }
+
+        /*    // 3. РИСУЕМ все объекты
+            for (int i = 0; i < GlobalObjects::objects.size(); i++)
+            {
+                appWindow.draw(GlobalObjects::objects[i].drawObject());
+            }
+
+            // Обновление спавнера
+            spawner.update(clock.getElapsedTime().asSeconds(), *sprite);
+
+            spawner.draw(appWindow);
+
+            // Проверка коллизий с игроком
+            for (auto &enemy : spawner.getEnemies())
+            {
+                if (FloatRect(enemy->getPosition(), {enemy->xPadding, enemy->yPadding}).findIntersection(FloatRect({sprite->getPosition().x + player.direction * (player.xPadding / (player.direction > 0 ? 1 : 2)), sprite->getPosition().y}, {1, player.yPadding / 2})))
+                {
+                    // Здесь нужно обрабатывать урон игроку
+                    // Например: player.takeDamage(enemy->damage);
+                    if (player.isAttack)
+                    {
+                        enemy->takeDamage(10);
+                    }
+                }
+            }
+          //  cout << "WALL" << endl;
+          //  cout << wall.size() << endl;
+            int collisionsCount = 0;
+
+            player.DrawPlayer(clock, sprite, appWindow);
+
+            appWindow.display();
+
+            if (sound.getStatus() == Sound::Status::Stopped)
+            {
+                sound.play();
+            }
+            while (const std::optional appEvent = appWindow.pollEvent())
+            {
+
+                if (appEvent->is<Event::Closed>())
+                    appWindow.close();
+
+                // window closed
+                if (appEvent->is<sf::Event::Closed>())
+                {
+                    appWindow.close();
+                }
+                else if (appEvent->is<Event::KeyReleased>())
+                {
+                    if (player.getMotion() == 3 || player.getMotion() == 2 || player.getMotion() == 4 || player.getMotion() == 5)
+                    {
+                        clock.restart();
+                        player.setMotion(0);
+                    }
+                }
+                // key pressed
+                else if (appEvent->is<sf::Event::KeyPressed>())
+                {
+
+                    const auto *keyPressed = appEvent->getIf<sf::Event::KeyPressed>();
+
+                      std::cout << (int)keyPressed->scancode << std::endl;
+
+                    if (keyPressed->scancode == Keyboard::Scancode::B && player.getMotion() != 1)
+                    {
+                        clock.restart();
+                        player.setMotion(1);
+                    }
+
+                    if (keyPressed->scancode == Keyboard::Scancode::D && player.getMotion() != 2)
+                    {
+                        player.setMotion(2);
+                    }
+
+                    if (keyPressed->scancode == Keyboard::Scancode::A && player.getMotion() != 3)
+                    {
+                        player.setMotion(3);
+                    }
+
+                    if (keyPressed->scancode == Keyboard::Scancode::W && player.getMotion() != 4)
+                    {
+                        player.setMotion(4);
+                    }
+
+                    if (keyPressed->scancode == Keyboard::Scancode::S && player.getMotion() != 5)
+                    {
+                        player.setMotion(5);
+                    }
+                    // std::cout << appEvent << std::endl;
+                }
+                // we don't process other types of events
+            }*/
     }
 
     ////////////////////////////////////////////// ////////////////////////////////////////////// //////////////////////////////////////////////
-    delete sprite;
+    // delete sprite;
 
-    
     GlobalObjects::objects.clear();
     return 0;
 }

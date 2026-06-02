@@ -5,7 +5,7 @@ using namespace std;
 
 const Texture &PlayerController::DrawPlayer(Clock clock, Sprite *sprite, RenderWindow &window)
 {
-    int j = clock.getElapsedTime().asSeconds() / 0.07f;
+    int j = clock.getElapsedTime().asSeconds() / 0.03f;
 
     Texture texture;
 
@@ -33,11 +33,11 @@ const Texture &PlayerController::DrawPlayer(Clock clock, Sprite *sprite, RenderW
         flipRect(sprite);
         for (int i = 0; i < GlobalObjects::objects.size(); i++)
         {
-            if (GlobalObjects::objects[i].checkCollision(sprite, xPadding, yPadding, 0, 1))
+            if (GlobalObjects::objects[i].checkCollision(sprite, xPadding, yPadding, 0, 2))
                 collisionsCount++;
         }
         if (collisionsCount == 0)
-            moveX(1);
+            moveX(2);
 
         break;
     case 3:
@@ -48,11 +48,11 @@ const Texture &PlayerController::DrawPlayer(Clock clock, Sprite *sprite, RenderW
 
         for (int i = 0; i < GlobalObjects::objects.size(); i++)
         {
-            if (GlobalObjects::objects[i].checkCollision(sprite, xPadding, yPadding, 0, -1))
+            if (GlobalObjects::objects[i].checkCollision(sprite, xPadding, yPadding, 0, -2))
                 collisionsCount++;
         }
         if (collisionsCount == 0)
-            moveX(-1);
+            moveX(-2);
 
         break;
     case 4:
@@ -64,11 +64,11 @@ const Texture &PlayerController::DrawPlayer(Clock clock, Sprite *sprite, RenderW
         }
         for (int i = 0; i < GlobalObjects::objects.size(); i++)
         {
-            if (GlobalObjects::objects[i].checkCollision(sprite, xPadding, yPadding, -1, 0))
+            if (GlobalObjects::objects[i].checkCollision(sprite, xPadding, yPadding, -2, 0))
                 collisionsCount++;
         }
         if (collisionsCount == 0)
-            moveY(-1);
+            moveY(-2);
 
         break;
     case 5:
@@ -80,11 +80,11 @@ const Texture &PlayerController::DrawPlayer(Clock clock, Sprite *sprite, RenderW
         }
         for (int i = 0; i < GlobalObjects::objects.size(); i++)
         {
-            if (GlobalObjects::objects[i].checkCollision(sprite, xPadding, yPadding, 1, 0))
+            if (GlobalObjects::objects[i].checkCollision(sprite, xPadding, yPadding, 2, 0))
                 collisionsCount++;
         }
         if (collisionsCount == 0)
-            moveY(1);
+            moveY(2);
 
         break;
     default:

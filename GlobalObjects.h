@@ -11,11 +11,12 @@
 #include <iostream>
 #include <stdio.h>
 #include <vector>
+#include "./Menu/Screen.h"
 class GlobalObjects
 {
 public:
     inline static std::vector<ObjectController> objects;
-
+    inline static ScreenManager* screenManager = new ScreenManager;
 };
 
 #endif

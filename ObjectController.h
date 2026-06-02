@@ -53,7 +53,7 @@ public:
     }
     ~ObjectController()
     {
-        cout << "DELETE OBJECT_CONTROLLER" << endl;
+     //   cout << "DELETE OBJECT_CONTROLLER" << endl;
         //  delete sprite;
     }
 
