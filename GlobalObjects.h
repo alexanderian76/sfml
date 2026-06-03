@@ -17,6 +17,8 @@ class GlobalObjects
 public:
     inline static std::vector<ObjectController> objects;
     inline static ScreenManager* screenManager = new ScreenManager;
+    inline static int screenWidth = 800;
+    inline static int screenHeight = 600;
 };
 
 #endif

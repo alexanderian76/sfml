@@ -21,13 +21,13 @@ int main()
 
     SoundBuffer buffer;
     buffer.loadFromFile("test.wav");
-    Sound sound(buffer);
-    sound.setBuffer(buffer);
+  //  Sound sound(buffer);
+   // sound.setBuffer(buffer);
   //  sound.setVolume(50);
   //  sound.play();
 
     RenderWindow appWindow(VideoMode({800, 600}, 8), "Bubble sort");
-
+    appWindow.setMouseCursorVisible(false);
     //ScreenManager screenManager;
     std::cout << "HELLO" << std::endl;
     //  std::unique_ptr<MainMenuScreen> mainMenuScreen = make_unique<MainMenuScreen>();
@@ -104,6 +104,8 @@ int main()
         GlobalObjects::screenManager->update(deltaTime);
 
         appWindow.clear(Color::Black); // 1. ОЧИЩАЕМ экран
+        if(appWindow.getSize() != Vector2u(GlobalObjects::screenWidth, GlobalObjects::screenHeight))
+            appWindow.setSize({GlobalObjects::screenWidth, GlobalObjects::screenHeight});
         GlobalObjects::screenManager->draw(appWindow);
         //  std::cout << "HELLO" << std::endl;
         appWindow.display();

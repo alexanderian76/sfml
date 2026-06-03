@@ -34,6 +34,9 @@ public:
         menu.addItem("Settings", []() {
             std::cout << "Opening settings..." << std::endl;
             // Здесь логика настроек
+            GlobalObjects::screenWidth = 1000;
+            GlobalObjects::screenHeight = 800;
+            
         });
         
         menu.addItem("Exit", []() {
