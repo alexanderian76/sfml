@@ -120,7 +120,7 @@ public:
 
         for (auto &enemy : spawner->getEnemies())
         {
-            if (FloatRect(enemy->getPosition(), {enemy->xPadding, enemy->yPadding}).findIntersection(FloatRect({playerSprite->getPosition().x + player.direction * (player.xPadding / (player.direction > 0 ? 1 : 2)), playerSprite->getPosition().y}, {1, player.yPadding / 2})))
+            if (FloatRect(enemy->getPosition(), {enemy->xPadding * 1.f, enemy->yPadding * 1.f}).findIntersection(FloatRect({playerSprite->getPosition().x + player.direction * (player.xPadding / (player.direction > 0 ? 1 : 2)), playerSprite->getPosition().y}, {1.f, player.yPadding / 2.f})))
             {
                 // Здесь нужно обрабатывать урон игроку
                 // Например: player.takeDamage(enemy->damage);
@@ -135,7 +135,7 @@ public:
 
         if (sound->getStatus() == Sound::Status::Stopped)
         {
-            sound->getCone();
+            sound->play();
         }
     }
 

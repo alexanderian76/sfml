@@ -1,8 +1,8 @@
 all:
-	g++ *.cpp ./Enemy/*.cpp -lsfml-graphics -lsfml-network -lsfml-system -lsfml-window -lsfml-audio
+	g++ *.cpp ./Enemy/*.cpp -std=c++17 -lsfml-graphics -lsfml-network -lsfml-system -lsfml-window -lsfml-audio
 
-	#g++ -c PlayerController.cpp -lsfml-graphics -lsfml-network -lsfml-system -lsfml-window -lsfml-audio
-	#g++ -c ObjectController.cpp -lsfml-graphics -lsfml-network -lsfml-system -lsfml-window -lsfml-audio
+	#g++ -c PlayerController.cpp -std=c++17 -lsfml-graphics -lsfml-network -lsfml-system -lsfml-window -lsfml-audio
+	#g++ -c ObjectController.cpp -std=c++17 -lsfml-graphics -lsfml-network -lsfml-system -lsfml-window -lsfml-audio
 	#g++ *.o
 	./a.out
 
