@@ -123,7 +123,7 @@ void PlayerController::moveX(float speed)
 
     if (x > 0 && speed < 0)
         this->x = x + speed;
-    if (x < 800 && speed > 0)
+    if (x < GlobalObjects::screenWidth && speed > 0)
         this->x = x + speed;
 }
 void PlayerController::moveY(float speed)

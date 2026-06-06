@@ -36,7 +36,7 @@ public:
         playerSprite = new Sprite(t);
 
         playerSprite->setOrigin({playerSprite->getLocalBounds().size.x / 2, playerSprite->getLocalBounds().size.y / 2});
-        playerSprite->setPosition({250, 150});
+       // playerSprite->setPosition({150, 100});
 
         // TODO
         // Утечка с текстурой, исправить потом для нормального рендера

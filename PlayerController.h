@@ -37,8 +37,8 @@ public:
         playerRect = IntRect({224, 0}, {224, 112});
         motion = 0;
         direction = 1;
-        x = 100;
-        y = 600;
+        x = 450;
+        y = 400;
         cout << texturesIdle[0].getSize().x << endl;
     }
     Texture *texturesAttack1;

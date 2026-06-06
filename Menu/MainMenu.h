@@ -16,7 +16,7 @@ public:
         screenType = 1;
         // Загрузка фона (опционально)
         if (backgroundTexture.loadFromFile("fondo1.png")) {
-            background.setSize(sf::Vector2f(800, 600));
+            background.setSize(sf::Vector2f(GlobalObjects::screenWidth, GlobalObjects::screenHeight));
             background.setTexture(&backgroundTexture);
         } else {
             background.setSize(sf::Vector2f(800, 600));

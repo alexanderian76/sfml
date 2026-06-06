@@ -49,7 +49,7 @@ sf::Vector2f EnemySpawner::getSpawnPosition(const sf::Vector2f &playerPos)
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_real_distribution<float> angleDist(0, 2 * 3.14159f);
-    std::uniform_real_distribution<float> distanceDist(400, 600);
+    std::uniform_real_distribution<float> distanceDist(100, 200);
 
     float angle = angleDist(gen);
     float distance = distanceDist(gen);
