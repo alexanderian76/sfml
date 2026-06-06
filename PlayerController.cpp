@@ -11,6 +11,7 @@ const Texture &PlayerController::DrawPlayer(Clock clock, Sprite *sprite, RenderW
 
     int collisionsCount = 0;
     isAttack = false;
+    playerVelocity = {0.f, 0.f};
     switch (motion)
     {
     case 0:
@@ -23,7 +24,10 @@ const Texture &PlayerController::DrawPlayer(Clock clock, Sprite *sprite, RenderW
         texture = texturesAttack1[j % 11];
         sprite->setTexture(texturesAttack1[j % 11]);
         if (j == 4)
+        {
+            GlobalObjects::camera->shake(8.f, 0.15f);
             isAttack = true;
+        }
 
         break;
     case 2:
@@ -37,7 +41,10 @@ const Texture &PlayerController::DrawPlayer(Clock clock, Sprite *sprite, RenderW
                 collisionsCount++;
         }
         if (collisionsCount == 0)
+        {
             moveX(2);
+            playerVelocity = {2.f, 0.f};
+        }
 
         break;
     case 3:
@@ -52,7 +59,10 @@ const Texture &PlayerController::DrawPlayer(Clock clock, Sprite *sprite, RenderW
                 collisionsCount++;
         }
         if (collisionsCount == 0)
+        {
             moveX(-2);
+            playerVelocity = {-2.f, 0.f};
+        }
 
         break;
     case 4:
@@ -68,7 +78,10 @@ const Texture &PlayerController::DrawPlayer(Clock clock, Sprite *sprite, RenderW
                 collisionsCount++;
         }
         if (collisionsCount == 0)
+        {
             moveY(-2);
+            playerVelocity = {0.f, -2.f};
+        }
 
         break;
     case 5:
@@ -84,7 +97,10 @@ const Texture &PlayerController::DrawPlayer(Clock clock, Sprite *sprite, RenderW
                 collisionsCount++;
         }
         if (collisionsCount == 0)
+        {
             moveY(2);
+            playerVelocity = {0.f, 2.f};
+        }
 
         break;
     default:

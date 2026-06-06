@@ -36,7 +36,7 @@ public:
         playerSprite = new Sprite(t);
 
         playerSprite->setOrigin({playerSprite->getLocalBounds().size.x / 2, playerSprite->getLocalBounds().size.y / 2});
-       // playerSprite->setPosition({150, 100});
+        // playerSprite->setPosition({150, 100});
 
         // TODO
         // Утечка с текстурой, исправить потом для нормального рендера
@@ -73,9 +73,25 @@ public:
 
             std::cout << (int)keyPressed->scancode << std::endl;
 
+            if (keyPressed->scancode == sf::Keyboard::Scancode::Space)
+            {
+                // Пример тряски при атаке
+                GlobalObjects::camera->shake(8.f, 0.15f);
+            }
+            if (keyPressed->scancode == sf::Keyboard::Scancode::E)
+            {
+                // Пример зума (как при рывке в Hades)
+                GlobalObjects::camera->setZoom(1.3f, 0.5f);
+            }
+            if (keyPressed->scancode == sf::Keyboard::Scancode::Q)
+            {
+                GlobalObjects::camera->setZoom(1.f, 0.5f);
+            }
+
             if (keyPressed->scancode == Keyboard::Scancode::B && player.getMotion() != 1)
             {
                 clock.restart();
+                
                 player.setMotion(1);
             }
 
@@ -109,6 +125,21 @@ public:
 
     void draw(sf::RenderWindow &window) override
     {
+        GlobalObjects::camera->update(0.01, playerSprite->getPosition(), player.playerVelocity);
+        GlobalObjects::camera->setView(window);
+        sf::RectangleShape gridLine;
+        gridLine.setFillColor(sf::Color(60, 60, 70, 100));
+
+        for (int i = 0; i <= 40; i++)
+        {
+            gridLine.setSize({4000.f, 1.f});
+            gridLine.setPosition({0.f, i * 100.f});
+            window.draw(gridLine);
+
+            gridLine.setSize({1.f, 4000.f});
+            gridLine.setPosition({i * 100.f, 0.f});
+            window.draw(gridLine);
+        }
         window.draw(*background);
 
         for (int i = 0; i < GlobalObjects::objects.size(); i++)

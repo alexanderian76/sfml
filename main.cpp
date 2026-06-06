@@ -12,16 +12,13 @@
 #include "./Menu/GameScreen.h"
 
 #include "GlobalObjects.h"
+#include "Camera.h"
 
 // g++ main.cpp -lsfml-graphics -lsfml-network -lsfml-system -lsfml-window -lsfml-audio
 using namespace sf;
 
 int main()
 {
-
-    //  cout << CFArrayGetValueAtIndex(CGDisplayCopyAllDisplayModes(CGMainDisplayID(), NULL), 0) << endl;
-    // cout << "Width: " << monitorWidth << "; Height: " << monitorHeight << endl;
-
     SoundBuffer buffer;
     buffer.loadFromFile("test.wav");
     //  Sound sound(buffer);
@@ -31,9 +28,20 @@ int main()
     auto video = sf::VideoMode::getDesktopMode();
     GlobalObjects::screenHeight = video.size.y;
     GlobalObjects::screenWidth = video.size.x;
-   // sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
-   // std::cout << sf::VideoMode::getFullscreenModes().size() << std::endl;
+    // sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
+    // std::cout << sf::VideoMode::getFullscreenModes().size() << std::endl;
     RenderWindow appWindow(video, "Bubble sort", State::Fullscreen);
+
+    // Создаем камеру для мира 4000x4000
+    GlobalObjects::camera = new Camera(appWindow, 4000.f, 4000.f);
+
+    // Настройка камеры как в Hades
+    GlobalObjects::camera->setFollowSpeed(4.5f);     // Скорость следования
+    GlobalObjects::camera->setLookAheadFactor(0.4f); // Фактор упреждения
+    GlobalObjects::camera->setLookAheadMax(180.f);   // Максимальное упреждение
+
+    // Устанавливаем мягкие границы (можно задать границы комнаты)
+    GlobalObjects::camera->setSoftBounds(sf::FloatRect({200.f, 200.f}, {3600.f, 3600.f}));
 
     appWindow.setMouseCursorVisible(false);
     // ScreenManager screenManager;
@@ -117,6 +125,7 @@ int main()
         GlobalObjects::screenManager->draw(appWindow);
         //  std::cout << "HELLO" << std::endl;
         appWindow.display();
+        
         while (const auto event = appWindow.pollEvent())
         {
             if (event->is<sf::Event::Closed>())
@@ -134,6 +143,9 @@ int main()
                 {
                     if (!GlobalObjects::screenManager->isEmpty())
                     {
+                        GlobalObjects::camera->setZoom(1.f, 0.f);
+                        
+                        GlobalObjects::camera->setViewDefault(appWindow);
                         int screenType = GlobalObjects::screenManager->currentScreenType();
                         GlobalObjects::screenManager->popScreen();
                         if (screenType == 1)

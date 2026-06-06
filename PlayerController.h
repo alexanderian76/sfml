@@ -57,6 +57,7 @@ public:
     int direction = 1;
     int currentFrame;
     int health = 100;
+    Vector2f playerVelocity = sf::Vector2f(0.f, 0.f);
     float getMaxHealth() const
     {
         return 100;
