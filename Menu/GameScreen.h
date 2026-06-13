@@ -12,7 +12,7 @@ class GameScreen : public Screen
 {
 private:
     PlayerController player;
-    Sprite *playerSprite;
+  //  Sprite *playerSprite;
     sf::Texture backgroundTexture, enemyTexture;
     EnemySpawner *spawner;
     Clock clock;
@@ -33,9 +33,9 @@ public:
         screenType = 2;
         clock.start();
         Texture t("./01_idle/idle_1.png");
-        playerSprite = new Sprite(t);
+     //   playerSprite = new Sprite(t);
 
-        playerSprite->setOrigin({playerSprite->getLocalBounds().size.x / 2, playerSprite->getLocalBounds().size.y / 2});
+        //playerSprite->setOrigin({playerSprite->getLocalBounds().size.x / 2, playerSprite->getLocalBounds().size.y / 2});
         // playerSprite->setPosition({150, 100});
 
         // TODO
@@ -125,7 +125,7 @@ public:
 
     void draw(sf::RenderWindow &window) override
     {
-        GlobalObjects::camera->update(0.01, playerSprite->getPosition(), player.playerVelocity);
+        GlobalObjects::camera->update(0.01, player.sprite->getPosition(), player.velocity);
         GlobalObjects::camera->setView(window);
         sf::RectangleShape gridLine;
         gridLine.setFillColor(sf::Color(60, 60, 70, 100));
@@ -146,12 +146,12 @@ public:
         {
             window.draw(GlobalObjects::objects[i].drawObject());
         }
-        spawner->update(clock.getElapsedTime().asSeconds(), *playerSprite);
+        spawner->update(clock.getElapsedTime().asSeconds(), *player.sprite);
         spawner->draw(window);
 
         for (auto &enemy : spawner->getEnemies())
         {
-            if (FloatRect(enemy->getPosition(), {enemy->xPadding * 1.f, enemy->yPadding * 1.f}).findIntersection(FloatRect({playerSprite->getPosition().x + player.direction * (player.xPadding / (player.direction > 0 ? 1 : 2)), playerSprite->getPosition().y}, {1.f, player.yPadding / 2.f})))
+            if (FloatRect(enemy->getPosition(), {enemy->xPadding * 1.f, enemy->yPadding * 1.f}).findIntersection(FloatRect({player.sprite->getPosition().x + player.direction * (player.xPadding / (player.direction > 0 ? 1 : 2)), player.sprite->getPosition().y}, {1.f, player.yPadding / 2.f})))
             {
                 // Здесь нужно обрабатывать урон игроку
                 // Например: player.takeDamage(enemy->damage);
@@ -162,7 +162,7 @@ public:
             }
         }
 
-        player.DrawPlayer(clock, playerSprite, window);
+        player.draw(clock, window);
 
         if (sound->getStatus() == Sound::Status::Stopped)
         {
@@ -187,7 +187,7 @@ public:
     {
         std::cout << "DELETE GAME SCREEN" << std::endl;
         delete spawner;
-        delete playerSprite;
+        //delete playerSprite;
         delete background;
         delete sound;
     }

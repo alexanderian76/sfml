@@ -57,7 +57,7 @@ private:
 
     // Look-ahead (упреждение)
     float m_lookAheadFactor = -0.03f;
-    float m_lookAheadMax = 550.f;
+    float m_lookAheadMax = 150.f;
     sf::Vector2f m_lookAheadOffset;
     sf::Vector2f m_currentLookAhead;
 
@@ -74,7 +74,7 @@ private:
 
     // Границы
     sf::FloatRect m_softBounds;
-    float m_boundarySoftness = 100.f; // Зона смягчения
+    float m_boundarySoftness = 200.f; // Зона смягчения
 
     // Dead zone (зона нечувствительности)
     sf::Vector2f m_deadZoneSize = sf::Vector2f(300.f, 200.f); // Размер зоны

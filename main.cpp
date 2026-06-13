@@ -13,12 +13,22 @@
 
 #include "GlobalObjects.h"
 #include "Camera.h"
+#include "Cutscene/Cutscene.h"
 
 // g++ main.cpp -lsfml-graphics -lsfml-network -lsfml-system -lsfml-window -lsfml-audio
 using namespace sf;
 
 int main()
 {
+
+    Font font;
+    if (!font.openFromFile("arialmt.ttf"))
+    {
+        // В случае ошибки можно использовать встроенный шрифт
+        // или продолжить без него (текст не будет отображаться)
+        throw std::runtime_error("Failed to load font");
+    }
+
     SoundBuffer buffer;
     buffer.loadFromFile("test.wav");
     //  Sound sound(buffer);
@@ -125,7 +135,7 @@ int main()
         GlobalObjects::screenManager->draw(appWindow);
         //  std::cout << "HELLO" << std::endl;
         appWindow.display();
-        
+
         while (const auto event = appWindow.pollEvent())
         {
             if (event->is<sf::Event::Closed>())
@@ -144,7 +154,7 @@ int main()
                     if (!GlobalObjects::screenManager->isEmpty())
                     {
                         GlobalObjects::camera->setZoom(1.f, 0.f);
-                        
+
                         GlobalObjects::camera->setViewDefault(appWindow);
                         int screenType = GlobalObjects::screenManager->currentScreenType();
                         GlobalObjects::screenManager->popScreen();
@@ -157,6 +167,11 @@ int main()
                             GlobalObjects::screenManager->pushScreen(make_unique<MainMenuScreen>());
                         }
                     }
+                }
+                else if (keyPressed->code == sf::Keyboard::Key::Z)
+                {
+                    GlobalObjects::camera->setViewDefault(appWindow);
+                    GlobalObjects::screenManager->pushScreen(make_unique<Cutscene>("TestName", font, 36));
                 }
             }
             //    std::cout << "EVENT END" << std::endl;

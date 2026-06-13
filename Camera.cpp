@@ -135,7 +135,7 @@ void Camera::update(float deltaTime, const sf::Vector2f &targetPosition,
 
     // 4. Плавное следование
     float smoothFactor = 1.f - std::exp(-m_followSpeed * deltaTime);
-    m_currentPosition += (m_targetPosition - m_currentPosition) * smoothFactor;
+    m_currentPosition += (m_targetPosition - m_currentPosition); //* smoothFactor;
 
     // 5. Обработка тряски
     if (m_shakeTimer > 0.f)
