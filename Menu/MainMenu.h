@@ -14,6 +14,7 @@ private:
 public:
     MainMenuScreen() {
         screenType = 1;
+        id = 1;
         // Загрузка фона (опционально)
         if (backgroundTexture.loadFromFile("fondo1.png")) {
             background.setSize(sf::Vector2f(GlobalObjects::screenWidth, GlobalObjects::screenHeight));
@@ -26,7 +27,8 @@ public:
         // Настройка пунктов меню
         menu.addItem("Start Game", []() {
             std::cout << "Starting game..." << std::endl;
-            GlobalObjects::screenManager->popScreen();
+            GlobalObjects::screenManager->removeScreen(1);
+            GlobalObjects::screenManager->removeScreen(2);
             GlobalObjects::screenManager->pushScreen(std::make_unique<GameScreen>());
 
         });

@@ -157,10 +157,12 @@ int main()
 
                         GlobalObjects::camera->setViewDefault(appWindow);
                         int screenType = GlobalObjects::screenManager->currentScreenType();
-                        GlobalObjects::screenManager->popScreen();
+                        int screenId = GlobalObjects::screenManager->currentScreenId();
+                        if (screenId == 1)
+                            GlobalObjects::screenManager->removeScreen(screenId);
                         if (screenType == 1)
                         {
-                            GlobalObjects::screenManager->pushScreen(make_unique<GameScreen>());
+                            //      GlobalObjects::screenManager->pushScreen(make_unique<GameScreen>());
                         }
                         else
                         {

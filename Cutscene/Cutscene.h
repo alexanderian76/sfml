@@ -42,6 +42,7 @@ public:
           dialogueText(font, textStr, fontSize)
     {
         screenType = 3;
+        id = 3;
         textAnimationTimer.start();
         // Настройка фонового изображения для диалогового окна
         dialogueBox.setSize(sf::Vector2f(800, 150));
@@ -147,7 +148,7 @@ public:
 
             if (keyPressed->scancode == sf::Keyboard::Scancode::Space)
             {
-                GlobalObjects::screenManager->popScreen();
+                GlobalObjects::screenManager->removeScreen(3);
             }
             else if (keyPressed->scancode == sf::Keyboard::Scancode::X)
             {

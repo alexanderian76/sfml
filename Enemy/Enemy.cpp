@@ -77,8 +77,7 @@ void Enemy::update(float deltaTime, const sf::Sprite &playerSprite)
     else
         damageTimer--;
 
-    Texture texture;
-    texture = texturesRun[j % 8];
+
     sprite->setTexture(texturesRun[j % 8]);
     // direction = 1;
     // flipRect(sprite);

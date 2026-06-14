@@ -12,7 +12,7 @@ class GameScreen : public Screen
 {
 private:
     PlayerController player;
-  //  Sprite *playerSprite;
+    //  Sprite *playerSprite;
     sf::Texture backgroundTexture, enemyTexture;
     EnemySpawner *spawner;
     Clock clock;
@@ -31,12 +31,13 @@ public:
 
         background = new Sprite(backgroundTexture);
         screenType = 2;
+        id = 2;
         clock.start();
         Texture t("./01_idle/idle_1.png");
-     //   playerSprite = new Sprite(t);
+        //   playerSprite = new Sprite(t);
 
-        //playerSprite->setOrigin({playerSprite->getLocalBounds().size.x / 2, playerSprite->getLocalBounds().size.y / 2});
-        // playerSprite->setPosition({150, 100});
+        // playerSprite->setOrigin({playerSprite->getLocalBounds().size.x / 2, playerSprite->getLocalBounds().size.y / 2});
+        //  playerSprite->setPosition({150, 100});
 
         // TODO
         // Утечка с текстурой, исправить потом для нормального рендера
@@ -91,7 +92,7 @@ public:
             if (keyPressed->scancode == Keyboard::Scancode::B && player.getMotion() != 1)
             {
                 clock.restart();
-                
+
                 player.setMotion(1);
             }
 
@@ -125,7 +126,10 @@ public:
 
     void draw(sf::RenderWindow &window) override
     {
-        GlobalObjects::camera->update(0.01, player.sprite->getPosition(), player.velocity);
+        if (GlobalObjects::screenManager->currentScreenId() == this->id)
+        {
+            GlobalObjects::camera->update(0.01, player.sprite->getPosition(), player.velocity);
+        }
         GlobalObjects::camera->setView(window);
         sf::RectangleShape gridLine;
         gridLine.setFillColor(sf::Color(60, 60, 70, 100));
@@ -146,7 +150,10 @@ public:
         {
             window.draw(GlobalObjects::objects[i].drawObject());
         }
-        spawner->update(clock.getElapsedTime().asSeconds(), *player.sprite);
+        if (GlobalObjects::screenManager->currentScreenId() == this->id)
+        {
+            spawner->update(clock.getElapsedTime().asSeconds(), *player.sprite);
+        }
         spawner->draw(window);
 
         for (auto &enemy : spawner->getEnemies())
@@ -187,7 +194,7 @@ public:
     {
         std::cout << "DELETE GAME SCREEN" << std::endl;
         delete spawner;
-        //delete playerSprite;
+        // delete playerSprite;
         delete background;
         delete sound;
     }
