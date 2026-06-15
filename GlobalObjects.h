@@ -13,14 +13,16 @@
 #include <vector>
 #include "./Menu/Screen.h"
 #include "Camera.h"
+#include "./Common/Settings.h"
 class GlobalObjects
 {
 public:
     inline static std::vector<ObjectController> objects;
     inline static ScreenManager* screenManager = new ScreenManager;
     inline static Camera *camera;
-    inline static uint screenWidth = 800;
-    inline static uint screenHeight = 600;
+  //  inline static uint screenWidth = 800;
+  //  inline static uint screenHeight = 600;
+    inline static Settings *settings = new Settings;
 };
 
 #endif

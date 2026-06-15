@@ -203,7 +203,7 @@ public:
 
         if (x > 0 && speed < 0)
             this->x = x + speed;
-        if (x < GlobalObjects::screenWidth && speed > 0)
+        if (x < GlobalObjects::settings->resolution.x && speed > 0)
             this->x = x + speed;
     }
     void moveY(float speed) override

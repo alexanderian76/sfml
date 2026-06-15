@@ -17,7 +17,7 @@ public:
         id = 1;
         // Загрузка фона (опционально)
         if (backgroundTexture.loadFromFile("fondo1.png")) {
-            background.setSize(sf::Vector2f(GlobalObjects::screenWidth, GlobalObjects::screenHeight));
+            background.setSize(sf::Vector2f(GlobalObjects::settings->resolution.x, GlobalObjects::settings->resolution.y));
             background.setTexture(&backgroundTexture);
         } else {
             background.setSize(sf::Vector2f(800, 600));
@@ -36,8 +36,8 @@ public:
         menu.addItem("Settings", []() {
             std::cout << "Opening settings..." << std::endl;
             // Здесь логика настроек
-            GlobalObjects::screenWidth = 1000;
-            GlobalObjects::screenHeight = 800;
+            GlobalObjects::settings->resolution.x = 1000;
+            GlobalObjects::settings->resolution.y = 800;
             
         });
         

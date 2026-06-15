@@ -1,5 +1,6 @@
 #include "Camera.h"
 #include <random>
+#include "GlobalObjects.h"
 
 Camera::Camera(sf::RenderWindow &window, float worldWidth, float worldHeight)
     : m_window(window), m_worldWidth(worldWidth), m_worldHeight(worldHeight), m_currentPosition(worldWidth / 2.f, worldHeight / 2.f), m_targetPosition(worldWidth / 2.f, worldHeight / 2.f), m_softBounds({0.f, 0.f}, {worldWidth, worldHeight})
@@ -157,13 +158,13 @@ void Camera::update(float deltaTime, const sf::Vector2f &targetPosition,
     }
 
     // 6. Плавный зум
-    if (std::abs(m_currentZoom - m_targetZoom) > 0.001f)
+    if (std::abs(m_currentZoom - GlobalObjects::settings->camZoom) > 0.001f)
     {
-        m_currentZoom += (m_targetZoom - m_currentZoom) * m_zoomSpeed * deltaTime;
+        m_currentZoom += (GlobalObjects::settings->camZoom - m_currentZoom) * m_zoomSpeed * deltaTime;
     }
     else
     {
-        m_currentZoom = m_targetZoom;
+        m_currentZoom = GlobalObjects::settings->camZoom;
     }
 
     // 7. Применяем все к виду
@@ -192,10 +193,12 @@ void Camera::shake(float intensity, float duration)
 
 void Camera::setZoom(float zoom, float duration)
 {
-    m_targetZoom = zoom;
+   // m_targetZoom = zoom;
+   GlobalObjects::settings->camZoom = zoom;
     if (duration <= 0.f)
     {
-        m_currentZoom = zoom;
+        GlobalObjects::settings->camZoom = zoom;
+        //m_currentZoom = zoom;
     }
 }
 

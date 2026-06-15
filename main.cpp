@@ -36,8 +36,8 @@ int main()
     //  sound.setVolume(50);
     //  sound.play();
     auto video = sf::VideoMode::getDesktopMode();
-    GlobalObjects::screenHeight = video.size.y;
-    GlobalObjects::screenWidth = video.size.x;
+    GlobalObjects::settings->resolution.y = video.size.y;
+    GlobalObjects::settings->resolution.x = video.size.x;
     // sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
     // std::cout << sf::VideoMode::getFullscreenModes().size() << std::endl;
     RenderWindow appWindow(video, "Bubble sort", State::Fullscreen);
@@ -130,8 +130,8 @@ int main()
         GlobalObjects::screenManager->update(deltaTime);
 
         appWindow.clear(Color::Black); // 1. ОЧИЩАЕМ экран
-        if (appWindow.getSize() != Vector2u(GlobalObjects::screenWidth, GlobalObjects::screenHeight))
-            appWindow.setSize({GlobalObjects::screenWidth, GlobalObjects::screenHeight});
+        if (appWindow.getSize() != Vector2u(GlobalObjects::settings->resolution.x, GlobalObjects::settings->resolution.y))
+            appWindow.setSize({GlobalObjects::settings->resolution.x, GlobalObjects::settings->resolution.y});
         GlobalObjects::screenManager->draw(appWindow);
         //  std::cout << "HELLO" << std::endl;
         appWindow.display();
@@ -172,7 +172,7 @@ int main()
                 }
                 else if (keyPressed->code == sf::Keyboard::Key::Z)
                 {
-                    GlobalObjects::camera->setViewDefault(appWindow);
+                   // GlobalObjects::camera->setViewDefault(appWindow);
                     GlobalObjects::screenManager->pushScreen(make_unique<Cutscene>("TestName", font, 36));
                 }
             }

@@ -46,14 +46,14 @@ public:
         textAnimationTimer.start();
         // Настройка фонового изображения для диалогового окна
         dialogueBox.setSize(sf::Vector2f(800, 150));
-        dialogueBox.setPosition(sf::Vector2f(50, 550));
+        dialogueBox.setPosition(sf::Vector2f(GlobalObjects::camera->getScreenPosition().x / 2 + 50, GlobalObjects::camera->getScreenPosition().y / 2 + 550));
         dialogueBox.setFillColor(sf::Color(0, 0, 0, 220));
         dialogueBox.setOutlineColor(sf::Color::White);
         dialogueBox.setOutlineThickness(2);
 
         // Настройка окна с именем персонажа
         nameBox.setSize(sf::Vector2f(200, 40));
-        nameBox.setPosition(sf::Vector2f(50, 510));
+        nameBox.setPosition(sf::Vector2f(GlobalObjects::camera->getScreenPosition().x / 2 + 50, GlobalObjects::camera->getScreenPosition().y / 2 + 510));
         nameBox.setFillColor(sf::Color(50, 50, 50, 220));
         nameBox.setOutlineColor(sf::Color::White);
         nameBox.setOutlineThickness(1);
@@ -62,12 +62,12 @@ public:
         speakerText.setFont(font);
         speakerText.setCharacterSize(24);
         speakerText.setFillColor(sf::Color::Yellow);
-        speakerText.setPosition(sf::Vector2f(60, 515));
+        speakerText.setPosition(sf::Vector2f(GlobalObjects::camera->getScreenPosition().x / 2 + 60, GlobalObjects::camera->getScreenPosition().y / 2 + 515));
 
         dialogueText.setFont(font);
         dialogueText.setCharacterSize(20);
         dialogueText.setFillColor(sf::Color::White);
-        dialogueText.setPosition(sf::Vector2f(60, 565));
+        dialogueText.setPosition(sf::Vector2f( GlobalObjects::camera->getScreenPosition().x / 2 + 60, GlobalObjects::camera->getScreenPosition().y / 2 + 565));
 
         // Создание фона катсцены
         sf::RectangleShape background(sf::Vector2f(1024, 768));
@@ -75,11 +75,11 @@ public:
 
         // Добавление декоративного элемента
         sf::CircleShape ornament(100);
-        ornament.setPosition(sf::Vector2f(700, 200));
+        ornament.setPosition(sf::Vector2f(GlobalObjects::camera->getScreenPosition().x / 2 + 700, GlobalObjects::camera->getScreenPosition().y / 2 + 200));
         ornament.setFillColor(sf::Color(100, 100, 200, 100));
 
         sf::RectangleShape ground(sf::Vector2f(1024, 100));
-        ground.setPosition(sf::Vector2f(0, 668));
+        ground.setPosition(sf::Vector2f(GlobalObjects::camera->getScreenPosition().x / 2, GlobalObjects::camera->getScreenPosition().y / 2 + 668));
         ground.setFillColor(sf::Color(40, 40, 60));
 
         // Добавление диалоговых строк
@@ -152,7 +152,7 @@ public:
             }
             else if (keyPressed->scancode == sf::Keyboard::Scancode::X)
             {
-                if (textIndex < lines[currentLine].text.length())
+                if (currentLine < lines.size() && textIndex < lines[currentLine].text.length())
                 {
                     textIndex = lines[currentLine].text.length();
                     displayedText = lines[currentLine].text;

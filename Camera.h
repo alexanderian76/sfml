@@ -39,6 +39,7 @@ public:
 
     sf::View getView() const { return m_view; }
     sf::Vector2f getPosition() const { return m_view.getCenter(); }
+    sf::Vector2f getScreenPosition() const { return screenToWorld({m_view.getCenter().x, m_view.getCenter().y}); }
 
     void setViewDefault(sf::RenderWindow &window);
 
@@ -69,7 +70,7 @@ private:
 
     // Зум
     float m_currentZoom = 1.f;
-    float m_targetZoom = 1.f;
+  //  float m_targetZoom = GlobalObjects::settings.camZoom;
     float m_zoomSpeed = 3.f;
 
     // Границы
