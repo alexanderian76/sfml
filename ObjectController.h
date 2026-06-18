@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef OBJECT_CONTROLLER_H
 #define OBJECT_CONTROLLER_H
 
@@ -5,6 +7,7 @@
 #include <iostream>
 #include <stdio.h>
 #include <string>
+#include "utils/utils.h"
 
 using namespace sf;
 using namespace std;
@@ -19,7 +22,7 @@ public:
         this->rect = IntRect(Vector2i(x, y), Vector2i(width, height));
         if (!isTextureLoaded)
         {
-            texture.loadFromFile("877.jpg");
+            texture.loadFromFile(getResourcePath() + "877.jpg");
             isTextureLoaded = true;
         }
         this->color = Color::Blue;

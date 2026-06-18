@@ -1,6 +1,7 @@
 #include "Enemy.h"
 #include <iostream>
 #include "../GlobalObjects.h"
+#include "../utils/utils.h"
 
 Enemy::Enemy(EnemyType type, sf::Vector2f startPos, sf::Texture &texture)
     : type(type), health(100), speed(100), damage(25), attackCooldown(1.0f), attackTimer(0)
@@ -8,7 +9,7 @@ Enemy::Enemy(EnemyType type, sf::Vector2f startPos, sf::Texture &texture)
     texturesRun = new Texture[8];
     for (int i = 0; i < 8; i++)
     {
-        texturesRun[i].loadFromFile("./02_run/run_" + to_string(i + 1) + ".png");
+        texturesRun[i].loadFromFile(getResourcePath() + "02_run/run_" + to_string(i + 1) + ".png");
     }
     sprite = new sf::Sprite(texture);
     sprite->setTexture(texture);

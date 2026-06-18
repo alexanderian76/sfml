@@ -1,5 +1,5 @@
 all:
-	g++ *.cpp ./Enemy/*.cpp -std=c++20 -lsfml-graphics -lsfml-network -lsfml-system -lsfml-window -lsfml-audio
+	g++ *.cpp ./utils/*.cpp ./Enemy/*.cpp -std=c++20 -lsfml-graphics -lsfml-network -lsfml-system -lsfml-window -lsfml-audio
 
 	#g++ -c PlayerController.cpp -std=c++17 -lsfml-graphics -lsfml-network -lsfml-system -lsfml-window -lsfml-audio
 	#g++ -c ObjectController.cpp -std=c++17 -lsfml-graphics -lsfml-network -lsfml-system -lsfml-window -lsfml-audio
@@ -13,6 +13,11 @@ static:
   /usr/lib/libsfml-window.so \
   /usr/lib/libsfml-system.so \
   -lGL -lX11 -lXrandr -lXcursor -ludev -lfreetype
+
+mac:
+	g++ *.cpp ./utils/*.cpp ./Enemy/*.cpp -std=c++20 -lsfml-graphics -lsfml-network -lsfml-system -lsfml-window -lsfml-audio -framework CoreFoundation
+	./a.out
+
 
 clear:
 	rm *.o

@@ -11,7 +11,7 @@ class Body
 private:
 public:
     IntRect rect;
-    Sprite* sprite;
+    Sprite *sprite;
     virtual const Texture &draw(Clock, RenderWindow &) {};
     virtual void setMotion(int) {};
     virtual int getMotion() {};
@@ -24,5 +24,8 @@ public:
     int direction = 1;
     int currentFrame;
     int health = 100;
+    float speed = 4.f;
     Vector2f velocity = sf::Vector2f(0.f, 0.f);
+    virtual void setVelocity(Vector2f v) {};
+    virtual Vector2f getVelocity() {};
 };

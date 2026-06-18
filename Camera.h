@@ -39,7 +39,7 @@ public:
 
     sf::View getView() const { return m_view; }
     sf::Vector2f getPosition() const { return m_view.getCenter(); }
-    sf::Vector2f getScreenPosition() const { return screenToWorld({m_view.getCenter().x, m_view.getCenter().y}); }
+    sf::Vector2f getScreenPosition() const { return screenToWorld({(int)m_view.getCenter().x, (int)m_view.getCenter().y}); }
 
     void setViewDefault(sf::RenderWindow &window);
 

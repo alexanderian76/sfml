@@ -6,6 +6,7 @@
 #include <optional>
 #include "MenuItem.h"
 #include <iostream>
+#include "../utils/utils.h"
 
 class Menu {
 private:
@@ -22,7 +23,7 @@ public:
              selectedColor(sf::Color::Yellow), font() {
         // Пытаемся загрузить шрифт
         
-        if (!font.openFromFile("arialmt.ttf")) {
+        if (!font.openFromFile(getResourcePath() + "arialmt.ttf")) {
             // В случае ошибки можно использовать встроенный шрифт
             // или продолжить без него (текст не будет отображаться)
             throw std::runtime_error("Failed to load font");

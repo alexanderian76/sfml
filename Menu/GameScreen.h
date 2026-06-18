@@ -7,6 +7,7 @@
 #include "../PlayerController.h"
 #include "../GlobalObjects.h"
 #include "../Enemy/EnemySpawner.h"
+#include "../utils/utils.h"
 
 class GameScreen : public Screen
 {
@@ -19,21 +20,56 @@ private:
     Sprite *background;
     SoundBuffer buffer;
     Sound *sound;
+    int map[400] = {
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 public:
     GameScreen()
     {
-        buffer.loadFromFile("test.wav");
+        buffer.loadFromFile(getResourcePath() + "test.wav");
         sound = new Sound(buffer);
         sound->play();
 
-        backgroundTexture.loadFromFile("696.jpg");
+        backgroundTexture.loadFromFile(getResourcePath() + "assets/second.jpeg");
+
+        for (int i = 0; i < 400; i++)
+        {
+            if (map[i] == 1)
+            {
+                for (int j = 1; j < 5; j++)
+                {
+                    ObjectController::wall((i % 20) * 80 + j * 10, (i / 20) * 80, 1, false, GlobalObjects::objects);
+                    ObjectController::wall((i % 20) * 80 + j * 10, (i / 20) * 80 + j * 10, 1, false, GlobalObjects::objects);
+                    ObjectController::wall((i % 20) * 80, (i / 20) * 80 + j * 10, 1, true, GlobalObjects::objects);
+                }
+            }
+        };
 
         background = new Sprite(backgroundTexture);
+        background->setScale({1.5, 1.5});
         screenType = 2;
         id = 2;
         clock.start();
-        Texture t("./01_idle/idle_1.png");
+        Texture t(getResourcePath() + "01_idle/idle_1.png");
         //   playerSprite = new Sprite(t);
 
         // playerSprite->setOrigin({playerSprite->getLocalBounds().size.x / 2, playerSprite->getLocalBounds().size.y / 2});
@@ -41,7 +77,7 @@ public:
 
         // TODO
         // Утечка с текстурой, исправить потом для нормального рендера
-        if (!enemyTexture.loadFromFile("./01_idle/idle_1.png"))
+        if (!enemyTexture.loadFromFile(getResourcePath() + "01_idle/idle_1.png"))
         {
             std::cerr << "Failed to load enemy texture!" << std::endl;
             throw;
@@ -59,11 +95,35 @@ public:
         }
         else if (event.is<Event::KeyReleased>())
         {
+            const auto *keyRealesed = event.getIf<sf::Event::KeyReleased>();
             if (player.getMotion() == 3 || player.getMotion() == 2 || player.getMotion() == 4 || player.getMotion() == 5)
             {
-
-                clock.restart();
-                player.setMotion(0);
+                if (keyRealesed->scancode == Keyboard::Scancode::D && player.velocity.x > 0)
+                    player.velocity.x = 0.f;
+                if (keyRealesed->scancode == Keyboard::Scancode::A && player.velocity.x < 0)
+                    player.velocity.x = 0.f;
+                if (keyRealesed->scancode == Keyboard::Scancode::W && player.velocity.y < 0)
+                    player.velocity.y = 0.f;
+                if (keyRealesed->scancode == Keyboard::Scancode::S && player.velocity.y > 0)
+                    player.velocity.y = 0.f;
+                if(player.velocity.x > 0)
+                {
+                    player.setMotion(2);
+                }
+                else if(player.velocity.x < 0)
+                {
+                    player.setMotion(3);
+                }
+                else if(player.velocity.y < 0)
+                {
+                    player.setMotion(4);
+                }
+                else if(player.velocity.y > 0)
+                {
+                    player.setMotion(5);
+                }
+                //  clock.restart();
+                //   player.setMotion(0);
             }
         }
         // key pressed
@@ -96,22 +156,22 @@ public:
                 player.setMotion(1);
             }
 
-            if (keyPressed->scancode == Keyboard::Scancode::D && player.getMotion() != 2)
+            if (keyPressed->scancode == Keyboard::Scancode::D)
             {
                 player.setMotion(2);
             }
 
-            if (keyPressed->scancode == Keyboard::Scancode::A && player.getMotion() != 3)
+            if (keyPressed->scancode == Keyboard::Scancode::A)
             {
                 player.setMotion(3);
             }
 
-            if (keyPressed->scancode == Keyboard::Scancode::W && player.getMotion() != 4)
+            if (keyPressed->scancode == Keyboard::Scancode::W)
             {
                 player.setMotion(4);
             }
 
-            if (keyPressed->scancode == Keyboard::Scancode::S && player.getMotion() != 5)
+            if (keyPressed->scancode == Keyboard::Scancode::S)
             {
                 player.setMotion(5);
             }

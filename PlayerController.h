@@ -6,6 +6,7 @@
 
 #include "GlobalObjects.h"
 #include "Common/Body.h"
+#include "utils/utils.h"
 using namespace sf;
 using namespace std;
 
@@ -19,19 +20,19 @@ public:
         texturesAttack1 = new Texture[11];
         for (int i = 0; i < 11; i++)
         {
-            texturesAttack1[i].loadFromFile("./05_1_atk/1_atk_" + to_string(i + 1) + ".png");
+            texturesAttack1[i].loadFromFile(getResourcePath() + "05_1_atk/1_atk_" + to_string(i + 1) + ".png");
         }
 
         texturesIdle = new Texture[8];
         for (int i = 0; i < 8; i++)
         {
-            texturesIdle[i].loadFromFile("./01_idle/idle_" + to_string(i + 1) + ".png");
+            texturesIdle[i].loadFromFile(getResourcePath() + "01_idle/idle_" + to_string(i + 1) + ".png");
         }
         cout << texturesIdle[1].getSize().x << endl;
         texturesRun = new Texture[8];
         for (int i = 0; i < 8; i++)
         {
-            texturesRun[i].loadFromFile("./02_run/run_" + to_string(i + 1) + ".png");
+            texturesRun[i].loadFromFile(getResourcePath() + "02_run/run_" + to_string(i + 1) + ".png");
         }
 
         sprite = new Sprite(texturesIdle[0]);
@@ -43,9 +44,9 @@ public:
         rect = IntRect({224, 0}, {224, 112});
         motion = 0;
         direction = 1;
-        x = 450;
-        y = 400;
-        sprite->setPosition({x,y});
+        x = 1000;
+        y = 100;
+        sprite->setPosition({x, y});
         cout << texturesIdle[0].getSize().x << endl;
     }
     Texture *texturesAttack1;
@@ -75,7 +76,14 @@ public:
 
         int collisionsCount = 0;
         isAttack = false;
-        this->velocity = {0.f, 0.f};
+        Vector2f localVelocity = {0.f, 0.f};
+        //this->velocity = {0.f, 0.f};
+
+        if(velocity == Vector2f({0.f, 0.f}) && motion != 1)
+        {
+            setMotion(0);
+        }
+
         switch (motion)
         {
         case 0:
@@ -95,23 +103,27 @@ public:
 
             break;
         case 2:
+        case 3:
+        case 4:
+        case 5:
             texture = texturesRun[j % 8];
             sprite->setTexture(texturesRun[j % 8]);
-            direction = 1;
+            direction = velocity.x != 0 ? velocity.x / abs(velocity.x) : direction;
             flipRect(sprite);
             for (int i = 0; i < GlobalObjects::objects.size(); i++)
             {
-                if (GlobalObjects::objects[i].checkCollision(sprite, xPadding, yPadding, 0, 2))
+                if (GlobalObjects::objects[i].checkCollision(sprite, xPadding, yPadding, velocity.y, velocity.x))
                     collisionsCount++;
             }
             if (collisionsCount == 0)
             {
-               // moveX(2);
-                velocity = {2.f, 0.f};
+                // moveX(2);
+               // velocity = {2.f, 0.f};
+                localVelocity = velocity;
             }
 
             break;
-        case 3:
+      /*  case 3:
             texture = texturesRun[j % 8];
             sprite->setTexture(texturesRun[j % 8]);
             direction = -1;
@@ -124,7 +136,7 @@ public:
             }
             if (collisionsCount == 0)
             {
-               // moveX(-2);
+                // moveX(-2);
                 velocity = {-2.f, 0.f};
             }
 
@@ -143,7 +155,7 @@ public:
             }
             if (collisionsCount == 0)
             {
-               // moveY(-2);
+                // moveY(-2);
                 velocity = {0.f, -2.f};
             }
 
@@ -162,18 +174,18 @@ public:
             }
             if (collisionsCount == 0)
             {
-                //moveY(2);
+                // moveY(2);
                 velocity = {0.f, 2.f};
             }
 
-            break;
+            break;*/
         default:
             break;
         }
         // cout << collisionsCount << endl;
         if (motion == 1 && j % 11 == 10)
             this->setMotion(0);
-        sprite->move(velocity);
+        sprite->move(localVelocity);
 
         window.draw(*sprite);
         sf::RectangleShape healthBar(sf::Vector2f(40, 5));
@@ -192,12 +204,44 @@ public:
 
     void setMotion(int newMotion) override
     {
+        switch(newMotion)
+        {
+            case 0:
+            case 1:
+                velocity = {0.f, 0.f};
+                break;
+            case 2:
+                velocity = velocity.y == 0 ? Vector2f({speed, velocity.y}) : Vector2f({sqrt(speed), velocity.y / abs(velocity.y) * sqrt(speed)});
+                break;
+            case 3:
+                velocity = velocity.y == 0 ? Vector2f({-speed, velocity.y}) : Vector2f({-sqrt(speed), velocity.y / abs(velocity.y) * sqrt(speed)});
+                break;
+            case 4:
+                velocity = velocity.x == 0 ? Vector2f({velocity.x, -speed}) : Vector2f({velocity.x / abs(velocity.x) * sqrt(speed), -sqrt(speed)});
+                break;
+            case 5:
+                velocity = velocity.x == 0 ? Vector2f({velocity.x, speed}) : Vector2f({velocity.x / abs(velocity.x) * sqrt(speed), sqrt(speed)});
+                break;
+            default:
+                break;
+        }
         this->motion = newMotion;
     }
     int getMotion() override
     {
         return this->motion;
     }
+
+
+    void setVelocity(Vector2f v) override
+    {
+        this->velocity = v;
+    }
+    Vector2f getVelocity() override
+    {
+        return this->velocity;
+    }
+
     void moveX(float speed) override
     {
 

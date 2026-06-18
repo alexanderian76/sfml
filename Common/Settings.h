@@ -7,6 +7,6 @@ class Settings
 {
 private:
 public:
-    sf::Vector2i resolution;
+    sf::Vector2u resolution;
     float camZoom = 1.f;
 };
