@@ -46,7 +46,10 @@ public:
     GameScreen()
     {
         buffer.loadFromFile(getResourcePath() + "test.wav");
+        
         sound = new Sound(buffer);
+        
+        sound->setVolume(GlobalObjects::settings->isMute ? 0.f : 100.f);
         sound->play();
 
         backgroundTexture.loadFromFile(getResourcePath() + "assets/second.jpeg");
@@ -174,6 +177,11 @@ public:
             if (keyPressed->scancode == Keyboard::Scancode::S)
             {
                 player.setMotion(5);
+            }
+
+            if(keyPressed->scancode == Keyboard::Scancode::M) {
+                GlobalObjects::settings->isMute = !GlobalObjects::settings->isMute;
+                sound->setVolume(GlobalObjects::settings->isMute ? 0.f : 100.f);
             }
             // std::cout << appEvent << std::endl;
         }
