@@ -93,6 +93,10 @@ public:
 
     void handleInput(const sf::Event &event, sf::RenderWindow &window) override
     {
+        if (GlobalObjects::screenManager->findScreenById(1) != nullptr || GlobalObjects::screenManager->findScreenById(3) != nullptr)
+        {
+            return;
+        }
         if (event.is<sf::Event::Closed>())
         {
             window.close();
@@ -190,7 +194,7 @@ public:
 
     void update(sf::Time deltaTime) override
     {
-        if (GlobalObjects::screenManager->findScreenById(1) != nullptr)
+        if (GlobalObjects::screenManager->findScreenById(1) != nullptr || GlobalObjects::screenManager->findScreenById(3) != nullptr)
         {
             return;
         }
