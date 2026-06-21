@@ -15,6 +15,7 @@ public:
     virtual void update(sf::Time deltaTime) = 0;
     virtual void draw(sf::RenderWindow &window) = 0;
     virtual void onEnter() {}
+    virtual void onEntered() {}
     virtual void onExit() {}
     int screenType = 0;
     int id = 0;
@@ -33,13 +34,14 @@ public:
         int id = screen->id;
         if (!screens.empty())
         {
-            screens.back()->onExit();
+            // screens.back()->onExit();
 
             // screens.top()->onExit();
         }
 
         screen->onEnter();
         screens.push_back(std::move(screen));
+        this->screens.back()->onEntered();
     }
 
     int currentScreenType()
@@ -52,6 +54,19 @@ public:
     {
         if (!screens.empty())
             return screens.back()->id;
+    }
+
+    Screen *findScreenById(int id)
+    {
+        if (!screens.empty())
+        {
+
+            auto resultScreen = std::find_if(screens.begin(), screens.end(), [id](std::unique_ptr<Screen> &s)
+                                             { return s->id == id; });
+            if (screens.end() != resultScreen)
+                return resultScreen->get();
+        }
+        return nullptr;
     }
 
     void removeScreen(int id)
@@ -68,17 +83,14 @@ public:
                               { return s->id == id; });
             }
         }
-        if (!screens.empty())
-        {
-            screens.back()->onEnter();
-        }
     }
 
     void handleInput(const sf::Event &event, sf::RenderWindow &window)
     {
         if (!screens.empty())
         {
-            screens.back()->handleInput(event, window);
+            std::for_each(screens.begin(), screens.end(), [event, &window](std::unique_ptr<Screen> &s)
+                          { s->handleInput(event, window); });
         }
     }
 
@@ -86,10 +98,9 @@ public:
     {
         if (!screens.empty())
         {
-            std::for_each(screens.begin(), screens.end(), [&deltaTime](std::unique_ptr<Screen>& s) {
-                s->update(deltaTime);
-            });
-            //screens.back()->update(deltaTime);
+            std::for_each(screens.begin(), screens.end(), [&deltaTime](std::unique_ptr<Screen> &s)
+                          { s->update(deltaTime); });
+            // screens.back()->update(deltaTime);
         }
     }
 
@@ -97,10 +108,9 @@ public:
     {
         if (!screens.empty())
         {
-            std::for_each(screens.begin(), screens.end(), [&window](std::unique_ptr<Screen>& s) {
-                s->draw(window);
-            });
-          //  screens.back()->draw(window);
+            std::for_each(screens.begin(), screens.end(), [&window](std::unique_ptr<Screen> &s)
+                          { s->draw(window); });
+            //  screens.back()->draw(window);
         }
     }
 

@@ -76,15 +76,15 @@ int main()
     ObjectController obj2(200, 500);
     obj.check = 1;
 
-  /*  GlobalObjects::objects.push_back(obj);
-    GlobalObjects::objects.push_back(obj1);
-    GlobalObjects::objects.push_back(obj2);
+    /*  GlobalObjects::objects.push_back(obj);
+      GlobalObjects::objects.push_back(obj1);
+      GlobalObjects::objects.push_back(obj2);
 
-    ObjectController::wall(200, 400, 10, false, GlobalObjects::objects);
-    ObjectController::wall(200, 200, 30, true, GlobalObjects::objects);
-    ObjectController::wall(200, 200, 30, false, GlobalObjects::objects);
-    ObjectController::wall(50, 200, 30, true, GlobalObjects::objects);
-*/
+      ObjectController::wall(200, 400, 10, false, GlobalObjects::objects);
+      ObjectController::wall(200, 200, 30, true, GlobalObjects::objects);
+      ObjectController::wall(200, 200, 30, false, GlobalObjects::objects);
+      ObjectController::wall(50, 200, 30, true, GlobalObjects::objects);
+  */
     // GlobalObjects::objects.insert(GlobalObjects::objects.end(), std::make_move_iterator(wall.begin()), std::make_move_iterator(wall.end()));
     //  wall.clear();
     srand(time(NULL));
@@ -98,7 +98,6 @@ int main()
         //    appWindow.draw(GlobalObjects::objects[i].drawObject());
     }
     clock.start();
-
 
     // Загрузка текстуры врага (замените на свой файл)
     sf::Texture enemyTexture;
@@ -144,13 +143,10 @@ int main()
                         GlobalObjects::camera->setZoom(1.f, 0.f);
 
                         GlobalObjects::camera->setViewDefault(appWindow);
-                        int screenType = GlobalObjects::screenManager->currentScreenType();
-                        int screenId = GlobalObjects::screenManager->currentScreenId();
-                        if (screenId == 1)
-                            GlobalObjects::screenManager->removeScreen(screenId);
-                        if (screenType == 1)
+
+                        if (GlobalObjects::screenManager->findScreenById(1) != nullptr)
                         {
-                            //      GlobalObjects::screenManager->pushScreen(make_unique<GameScreen>());
+                            GlobalObjects::screenManager->removeScreen(1);
                         }
                         else
                         {
@@ -164,7 +160,6 @@ int main()
                 }
             }
         }
-
     }
 
     ////////////////////////////////////////////// ////////////////////////////////////////////// //////////////////////////////////////////////

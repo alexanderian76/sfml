@@ -8,6 +8,7 @@
 #include "../GlobalObjects.h"
 #include "../Enemy/EnemySpawner.h"
 #include "../utils/utils.h"
+#include "../Sound/SoundScreen.h"
 
 class GameScreen : public Screen
 {
@@ -18,8 +19,8 @@ private:
     EnemySpawner *spawner;
     Clock clock;
     Sprite *background;
-    SoundBuffer buffer;
-    Sound *sound;
+   // SoundBuffer buffer;
+  //  Sound *sound;
     int map[400] = {
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0,
@@ -45,12 +46,12 @@ private:
 public:
     GameScreen()
     {
-        buffer.loadFromFile(getResourcePath() + "test.wav");
+       // buffer.loadFromFile(getResourcePath() + "test.wav");
         
-        sound = new Sound(buffer);
+       // sound = new Sound(buffer);
         
-        sound->setVolume(GlobalObjects::settings->isMute ? 0.f : 100.f);
-        sound->play();
+     //   sound->setVolume(GlobalObjects::settings->isMute ? 0.f : 100.f);
+      //  sound->play();
 
         backgroundTexture.loadFromFile(getResourcePath() + "assets/second.jpeg");
 
@@ -179,22 +180,34 @@ public:
                 player.setMotion(5);
             }
 
-            if(keyPressed->scancode == Keyboard::Scancode::M) {
+          /*  if(keyPressed->scancode == Keyboard::Scancode::M) {
                 GlobalObjects::settings->isMute = !GlobalObjects::settings->isMute;
                 sound->setVolume(GlobalObjects::settings->isMute ? 0.f : 100.f);
-            }
+            }*/
             // std::cout << appEvent << std::endl;
         }
     }
 
     void update(sf::Time deltaTime) override
     {
+        if (GlobalObjects::screenManager->findScreenById(1) != nullptr)
+        {
+            return;
+        }
         // Обновление логики меню (анимации и т.д.)
+        if (GlobalObjects::screenManager->findScreenById(this->id) != nullptr)
+        {
+            spawner->update(clock.getElapsedTime().asSeconds(), *player.sprite);
+        }
     }
 
     void draw(sf::RenderWindow &window) override
     {
-        if (GlobalObjects::screenManager->currentScreenId() == this->id)
+        if (GlobalObjects::screenManager->findScreenById(1) != nullptr)
+        {
+            return;
+        }
+        if (GlobalObjects::screenManager->findScreenById(this->id) != nullptr)
         {
             GlobalObjects::camera->update(0.01, player.sprite->getPosition(), player.velocity);
         }
@@ -218,10 +231,7 @@ public:
         {
             window.draw(GlobalObjects::objects[i].drawObject());
         }
-        if (GlobalObjects::screenManager->currentScreenId() == this->id)
-        {
-            spawner->update(clock.getElapsedTime().asSeconds(), *player.sprite);
-        }
+        
         spawner->draw(window);
 
         for (auto &enemy : spawner->getEnemies())
@@ -239,10 +249,10 @@ public:
 
         player.draw(clock, window);
 
-        if (sound->getStatus() == Sound::Status::Stopped)
+      /*  if (sound->getStatus() == Sound::Status::Stopped)
         {
             sound->play();
-        }
+        }*/
     }
 
     void onEnter() override
@@ -250,8 +260,15 @@ public:
         std::cout << "Entering main menu" << std::endl;
     }
 
+    void onEntered() override
+    {
+        GlobalObjects::screenManager->pushScreen(std::make_unique<SoundScreen>());
+        std::cout << "Entered game screen" << std::endl;
+    }
+
     void onExit() override
     {
+        GlobalObjects::screenManager->removeScreen(4);
         std::cout << "Exiting game screen" << std::endl;
     }
 
@@ -264,6 +281,6 @@ public:
         delete spawner;
         // delete playerSprite;
         delete background;
-        delete sound;
+       // delete sound;
     }
 };
