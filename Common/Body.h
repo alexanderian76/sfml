@@ -12,9 +12,9 @@ private:
 public:
     IntRect rect;
     Sprite *sprite;
-    virtual const Texture &draw(Clock, RenderWindow &) {};
+    virtual void draw(Clock, RenderWindow &) {};
     virtual void setMotion(int) {};
-    virtual int getMotion() {};
+    virtual int getMotion() { return 0; };
     virtual void moveX(float) {};
     virtual void moveY(float) {};
     virtual void flipRect(Sprite *) {};
@@ -27,5 +27,5 @@ public:
     float speed = 4.f;
     Vector2f velocity = sf::Vector2f(0.f, 0.f);
     virtual void setVelocity(Vector2f v) {};
-    virtual Vector2f getVelocity() {};
+    virtual Vector2f getVelocity() { return Vector2f(0.f,0.f); };
 };

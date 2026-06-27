@@ -20,19 +20,24 @@ public:
         texturesAttack1 = new Texture[11];
         for (int i = 0; i < 11; i++)
         {
-            texturesAttack1[i].loadFromFile(getResourcePath() + "05_1_atk/1_atk_" + to_string(i + 1) + ".png");
+            if(!texturesAttack1[i].loadFromFile(getResourcePath() + "05_1_atk/1_atk_" + to_string(i + 1) + ".png"))
+                std::cout << "Fail to load " << "05_1_atk/1_atk_" + to_string(i + 1) + ".png" << std::endl;
         }
 
         texturesIdle = new Texture[8];
         for (int i = 0; i < 8; i++)
         {
-            texturesIdle[i].loadFromFile(getResourcePath() + "01_idle/idle_" + to_string(i + 1) + ".png");
+            if(!texturesIdle[i].loadFromFile(getResourcePath() + "01_idle/idle_" + to_string(i + 1) + ".png"))
+                std::cout << "Fail to load " << "01_idle/idle_" + to_string(i + 1) + ".png" << std::endl;
+            
         }
         cout << texturesIdle[1].getSize().x << endl;
         texturesRun = new Texture[8];
         for (int i = 0; i < 8; i++)
         {
-            texturesRun[i].loadFromFile(getResourcePath() + "02_run/run_" + to_string(i + 1) + ".png");
+
+            if(!texturesRun[i].loadFromFile(getResourcePath() + "02_run/run_" + to_string(i + 1) + ".png"))
+                std::cout << "Fail to load " << "02_run/run_" + to_string(i + 1) + ".png" << std::endl;
         }
 
         sprite = new Sprite(texturesIdle[0]);
@@ -68,7 +73,7 @@ public:
         delete sprite;
     }
 
-    const Texture &draw(Clock clock, RenderWindow &window) override
+    void draw(Clock clock, RenderWindow &window) override
     {
         int j = clock.getElapsedTime().asSeconds() / 0.03f;
 
@@ -199,7 +204,7 @@ public:
         currentHealth.setPosition({sprite->getPosition().x - 20, sprite->getPosition().y - 30});
         window.draw(currentHealth);
 
-        return texture;
+     //   return texture;
     }
 
     void setMotion(int newMotion) override

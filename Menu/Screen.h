@@ -54,6 +54,7 @@ public:
     {
         if (!screens.empty())
             return screens.back()->id;
+        return -1;
     }
 
     Screen *findScreenById(int id)

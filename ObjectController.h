@@ -22,8 +22,7 @@ public:
         this->rect = IntRect(Vector2i(x, y), Vector2i(width, height));
         if (!isTextureLoaded)
         {
-            texture.loadFromFile(getResourcePath() + "877.jpg");
-            isTextureLoaded = true;
+            isTextureLoaded = texture.loadFromFile(getResourcePath() + "877.jpg");
         }
         this->color = Color::Blue;
         this->sprite = Sprite(texture);
@@ -62,7 +61,7 @@ public:
 
 private:
     IntRect rect;
-    int x, y, width = 20, height = 20;
+    int x, y, width = 10, height = 10;
     static Texture texture;
     static bool isTextureLoaded;
     Sprite sprite;

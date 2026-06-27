@@ -9,7 +9,9 @@ Enemy::Enemy(EnemyType type, sf::Vector2f startPos, sf::Texture &texture)
     texturesRun = new Texture[8];
     for (int i = 0; i < 8; i++)
     {
-        texturesRun[i].loadFromFile(getResourcePath() + "02_run/run_" + to_string(i + 1) + ".png");
+        if(!texturesRun[i].loadFromFile(getResourcePath() + "02_run/run_" + to_string(i + 1) + ".png")) {
+            std::cout << "Fail to load " << "02_run/run_" + to_string(i + 1) + ".png" << std::endl;
+        }
     }
     sprite = new sf::Sprite(texture);
     sprite->setTexture(texture);

@@ -19,7 +19,9 @@ public:
         std::cout << "HELLO " << GlobalObjects::screenManager->currentScreenId() << std::endl;
         if (GlobalObjects::screenManager->findScreenById(2) != nullptr)
         {
-            buffer.loadFromFile(getResourcePath() + "test.wav");
+
+            if(!buffer.loadFromFile(getResourcePath() + "test.wav"))
+                std::cout << "Fail to load sound" << std::endl;
             sound = new Sound(buffer);
             sound->setVolume(GlobalObjects::settings->isMute ? 0.f : 100.f);
             sound->play();

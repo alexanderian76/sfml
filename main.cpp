@@ -31,7 +31,10 @@ int main()
     }
 
     SoundBuffer buffer;
-    buffer.loadFromFile(getResourcePath() + "test.wav");
+    
+    if(!buffer.loadFromFile(getResourcePath() + "test.wav")) {
+        std::cout << "Fail to load test.wav" << std::endl;
+    }
     //  Sound sound(buffer);
     // sound.setBuffer(buffer);
     //  sound.setVolume(50);
@@ -63,7 +66,10 @@ int main()
     int j = 0;
     // Event appEvent;
     Texture fondot;
-    fondot.loadFromFile(getResourcePath() + "696.jpg");
+    
+    if(!fondot.loadFromFile(getResourcePath() + "696.jpg")) {
+        std::cout << "Fail to load fondot" << std::endl;
+    }
 
     Sprite fondo(fondot);
 
