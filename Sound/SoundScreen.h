@@ -4,6 +4,7 @@
 #include "../GlobalObjects.h"
 #include <SFML/Audio.hpp>
 #include "../utils/utils.h"
+#include "../consts.h"
 
 class SoundScreen : public Screen
 {
@@ -14,10 +15,10 @@ private:
 public:
     SoundScreen()
     {
-        this->id = 4;
+        this->id = (int)ScreenId::SOUND;
         this->screenType = 4;
         std::cout << "HELLO " << GlobalObjects::screenManager->currentScreenId() << std::endl;
-        if (GlobalObjects::screenManager->findScreenById(2) != nullptr)
+        if (GlobalObjects::screenManager->findScreenById((int)ScreenId::GAME) != nullptr)
         {
 
             if(!buffer.loadFromFile(getResourcePath() + "test.wav"))

@@ -15,6 +15,7 @@
 #include "Camera.h"
 #include "Cutscene/Cutscene.h"
 #include "utils/utils.h"
+#include "consts.h"
 
 // g++ main.cpp -lsfml-graphics -lsfml-network -lsfml-system -lsfml-window -lsfml-audio
 using namespace sf;
@@ -150,9 +151,9 @@ int main()
 
                         GlobalObjects::camera->setViewDefault(appWindow);
 
-                        if (GlobalObjects::screenManager->findScreenById(1) != nullptr)
+                        if (GlobalObjects::screenManager->findScreenById((int)ScreenId::MAIN_MENU) != nullptr)
                         {
-                            GlobalObjects::screenManager->removeScreen(1);
+                            GlobalObjects::screenManager->removeScreen((int)ScreenId::MAIN_MENU);
                         }
                         else
                         {

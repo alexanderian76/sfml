@@ -8,6 +8,7 @@
 #include "../GlobalObjects.h"
 
 #include "../utils/utils.h"
+#include "../consts.h"
 
 struct DialogueLine
 {
@@ -42,7 +43,7 @@ public:
           dialogueText(font, textStr, fontSize)
     {
         screenType = 3;
-        id = 3;
+        id = (int)ScreenId::CUTSCENE;
         textAnimationTimer.start();
         // Настройка фонового изображения для диалогового окна
         dialogueBox.setSize(sf::Vector2f(800, 150));
@@ -148,7 +149,7 @@ public:
 
             if (keyPressed->scancode == sf::Keyboard::Scancode::Space)
             {
-                GlobalObjects::screenManager->removeScreen(3);
+                GlobalObjects::screenManager->removeScreen((int)ScreenId::CUTSCENE);
             }
             else if (keyPressed->scancode == sf::Keyboard::Scancode::X)
             {

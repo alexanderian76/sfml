@@ -4,6 +4,7 @@
 #include "Menu.h"
 #include "GameScreen.h"
 #include <iostream>
+#include "../consts.h"
 
 class MainMenuScreen : public Screen {
 private:
@@ -14,7 +15,7 @@ private:
 public:
     MainMenuScreen() {
         screenType = 1;
-        id = 1;
+        id = (int)ScreenId::MAIN_MENU;
         // Загрузка фона (опционально)
         if (backgroundTexture.loadFromFile("fondo1.png")) {
             background.setSize(sf::Vector2f(GlobalObjects::settings->resolution.x, GlobalObjects::settings->resolution.y));
@@ -27,8 +28,8 @@ public:
         // Настройка пунктов меню
         menu.addItem("Start Game", []() {
             std::cout << "Starting game..." << std::endl;
-            GlobalObjects::screenManager->removeScreen(1);
-            GlobalObjects::screenManager->removeScreen(2);
+            GlobalObjects::screenManager->removeScreen((int)ScreenId::MAIN_MENU);
+            GlobalObjects::screenManager->removeScreen((int)ScreenId::GAME);
             GlobalObjects::screenManager->pushScreen(std::make_unique<GameScreen>());
 
         });

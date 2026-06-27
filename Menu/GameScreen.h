@@ -9,6 +9,7 @@
 #include "../Enemy/EnemySpawner.h"
 #include "../utils/utils.h"
 #include "../Sound/SoundScreen.h"
+#include "../consts.h"
 
 class GameScreen : public Screen
 {
@@ -73,7 +74,7 @@ public:
         background = new Sprite(backgroundTexture);
         background->setScale({1.5, 1.5});
         screenType = 2;
-        id = 2;
+        id = (int)ScreenId::GAME;
         clock.start();
         Texture t(getResourcePath() + "01_idle/idle_1.png");
         //   playerSprite = new Sprite(t);
@@ -95,7 +96,7 @@ public:
 
     void handleInput(const sf::Event &event, sf::RenderWindow &window) override
     {
-        if (GlobalObjects::screenManager->findScreenById(1) != nullptr || GlobalObjects::screenManager->findScreenById(3) != nullptr)
+        if (GlobalObjects::screenManager->findScreenById((int)ScreenId::MAIN_MENU) != nullptr || GlobalObjects::screenManager->findScreenById((int)ScreenId::CUTSCENE) != nullptr)
         {
             return;
         }
@@ -196,7 +197,7 @@ public:
 
     void update(sf::Time deltaTime) override
     {
-        if (GlobalObjects::screenManager->findScreenById(1) != nullptr || GlobalObjects::screenManager->findScreenById(3) != nullptr)
+        if (GlobalObjects::screenManager->findScreenById((int)ScreenId::MAIN_MENU) != nullptr || GlobalObjects::screenManager->findScreenById((int)ScreenId::CUTSCENE) != nullptr)
         {
             return;
         }
@@ -209,7 +210,7 @@ public:
 
     void draw(sf::RenderWindow &window) override
     {
-        if (GlobalObjects::screenManager->findScreenById(1) != nullptr)
+        if (GlobalObjects::screenManager->findScreenById((int)ScreenId::MAIN_MENU) != nullptr)
         {
             return;
         }
@@ -269,12 +270,13 @@ public:
     void onEntered() override
     {
         GlobalObjects::screenManager->pushScreen(std::make_unique<SoundScreen>());
+        std::cout << this->id << std::endl;
         std::cout << "Entered game screen" << std::endl;
     }
 
     void onExit() override
     {
-        GlobalObjects::screenManager->removeScreen(4);
+        GlobalObjects::screenManager->removeScreen((int)ScreenId::SOUND);
         std::cout << "Exiting game screen" << std::endl;
     }
 
