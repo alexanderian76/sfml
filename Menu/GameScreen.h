@@ -54,7 +54,7 @@ public:
      //   sound->setVolume(GlobalObjects::settings->isMute ? 0.f : 100.f);
       //  sound->play();
 
-        if(!backgroundTexture.loadFromFile(getResourcePath() + "assets/second.jpeg")) {
+        if(!backgroundTexture.loadFromFile(getResourcePath() + "second.jpeg")) {
             std::cout << "Fail to load background" << std::endl;
         }
 

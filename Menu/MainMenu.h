@@ -5,6 +5,7 @@
 #include "GameScreen.h"
 #include <iostream>
 #include "../consts.h"
+#include "../utils/utils.h"
 
 class MainMenuScreen : public Screen {
 private:
@@ -17,7 +18,7 @@ public:
         screenType = 1;
         id = (int)ScreenId::MAIN_MENU;
         // Загрузка фона (опционально)
-        if (backgroundTexture.loadFromFile("fondo1.png")) {
+        if (backgroundTexture.loadFromFile(getResourcePath() + "fondo1.png")) {
             background.setSize(sf::Vector2f(GlobalObjects::settings->resolution.x, GlobalObjects::settings->resolution.y));
             background.setTexture(&backgroundTexture);
         } else {

@@ -15,7 +15,7 @@ std::string getResourcePath()
 
     return std::string(path) + "/";
 #endif
-    return "";
+    return "assets/";
 }
 
 sf::String toSFString(const std::string &utf8String)
