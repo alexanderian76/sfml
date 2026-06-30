@@ -2,6 +2,7 @@
 #if defined(__APPLE__)
 #include <CoreFoundation/CoreFoundation.h>
 #endif
+#include <string>
 
 std::string getResourcePath()
 {

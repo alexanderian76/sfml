@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <string>
 #include "utils/utils.h"
+#include "consts.h"
 
 using namespace sf;
 using namespace std;
@@ -22,10 +23,13 @@ public:
         this->rect = IntRect(Vector2i(x, y), Vector2i(width, height));
         if (!isTextureLoaded)
         {
-            isTextureLoaded = texture.loadFromFile(getResourcePath() + "877.jpg");
+         //   isTextureLoaded = texture.loadFromFile(getResourcePath() + "877.jpg");
         }
+        
         this->color = Color::Blue;
         this->sprite = Sprite(texture);
+        this->sprite.setColor(this->color);
+        sprite.setTextureRect(rect);
         this->sprite.setPosition(Vector2f(x, y));
     }
     int checkCollision(Sprite *, int xPadding, int yPadding, int ySpeed, int xSpeed);
@@ -44,15 +48,16 @@ public:
             items.emplace_back(posX, posY);
             if (isVertical)
             {
-                posY += 20;
+                posY += 10 * scale;
             }
             else
             {
-                posX += 20;
+                posX += 10 * scale;
             }
         }
 
     }
+
     ~ObjectController()
     {
      //   cout << "DELETE OBJECT_CONTROLLER" << endl;
@@ -61,7 +66,7 @@ public:
 
 private:
     IntRect rect;
-    int x, y, width = 10, height = 10;
+    int x, y, width = 10 * scale, height = 10 * scale;
     static Texture texture;
     static bool isTextureLoaded;
     Sprite sprite;

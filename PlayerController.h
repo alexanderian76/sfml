@@ -115,17 +115,7 @@ public:
             sprite->setTexture(texturesRun[j % 8]);
             direction = velocity.x != 0 ? velocity.x / abs(velocity.x) : direction;
             flipRect(sprite);
-            for (int i = 0; i < GlobalObjects::objects.size(); i++)
-            {
-                if (GlobalObjects::objects[i].checkCollision(sprite, xPadding, yPadding, velocity.y, velocity.x))
-                    collisionsCount++;
-            }
-            if (collisionsCount == 0)
-            {
-                // moveX(2);
-               // velocity = {2.f, 0.f};
-                localVelocity = velocity;
-            }
+            localVelocity = this->validateVelocity();
 
             break;
       /*  case 3:
@@ -272,4 +262,6 @@ public:
         }
         sprite->setScale(Vector2f(direction * 1.f, 1.f));
     }
+
+    Vector2f validateVelocity();
 };
