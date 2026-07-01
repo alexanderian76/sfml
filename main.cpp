@@ -48,7 +48,7 @@ int main()
     RenderWindow appWindow(video, "Bubble sort", State::Fullscreen);
 
     // Создаем камеру для мира 4000x4000
-    GlobalObjects::camera = new Camera(appWindow, 4000.f, 4000.f);
+    GlobalObjects::camera = new Camera(appWindow, 40000.f, 40000.f);
 
     // Настройка камеры как в Hades
     GlobalObjects::camera->setFollowSpeed(4.5f);     // Скорость следования

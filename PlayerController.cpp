@@ -1,5 +1,6 @@
 #include "PlayerController.h"
 #include <fstream>
+#include "utils/utils.h"
 using namespace sf;
 using namespace std;
 
@@ -11,11 +12,11 @@ Vector2f PlayerController::validateVelocity()
     Vector2f localVelocity = {0.f, 0.f};
     for (int i = 0; i < GlobalObjects::objects.size(); i++)
     {
-        if (GlobalObjects::objects[i].checkCollision(sprite, xPadding, yPadding, velocity.y, velocity.x))
+        if (GlobalObjects::objects[i].checkCollision(sprite, xPadding, yPadding, sgn(velocity.y) * speed, sgn(velocity.x) * speed))
             canMoveBoth = false;
-        if (GlobalObjects::objects[i].checkCollision(sprite, xPadding, yPadding, velocity.y, 0))
+        if (GlobalObjects::objects[i].checkCollision(sprite, xPadding, yPadding, sgn(velocity.y) * speed, 0))
             canMoveY = false;
-        if (GlobalObjects::objects[i].checkCollision(sprite, xPadding, yPadding, 0, velocity.x))
+        if (GlobalObjects::objects[i].checkCollision(sprite, xPadding, yPadding, 0, sgn(velocity.x) * speed))
             canMoveX = false;
     }
     if (canMoveBoth)
@@ -30,5 +31,6 @@ Vector2f PlayerController::validateVelocity()
     {
         localVelocity.y = velocity.y;
     }
+
     return localVelocity;
 }

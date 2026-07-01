@@ -56,7 +56,7 @@ public:
         
         // SFML 3: используем std::visit или is<> для определения типа события
         if (const auto* keyPressed = event.getIf<sf::Event::KeyPressed>()) {
-            std::cout << (int)(keyPressed->code) << std::endl;
+           // std::cout << (int)(keyPressed->code) << std::endl;
             switch (keyPressed->code) {
                 case sf::Keyboard::Key::Up:
                     if (selectedIndex > 0) {

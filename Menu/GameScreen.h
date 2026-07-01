@@ -242,7 +242,7 @@ public:
 
             const auto *keyPressed = event.getIf<sf::Event::KeyPressed>();
 
-            std::cout << (int)keyPressed->scancode << std::endl;
+          //  std::cout << (int)keyPressed->scancode << std::endl;
 
             if (keyPressed->scancode == sf::Keyboard::Scancode::Space)
             {
