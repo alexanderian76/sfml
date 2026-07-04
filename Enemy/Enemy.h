@@ -4,13 +4,8 @@
 #include <iostream>
 #include <stdio.h>
 
-enum class EnemyType
-{
-    BASIC,
-    FAST,
-    TANK,
-    RANGED
-};
+#include "../consts.h"
+
 
 class Enemy
 {
@@ -32,9 +27,12 @@ public:
     bool checkCollision(sf::Sprite &sprite);
 
     void setColor(const sf::Color &color);
+
     static const int xPadding = 90;
     static const int yPadding = 60;
     int damageTimer = 0;
+
+    void onDeath();
 
     ~Enemy()
     {

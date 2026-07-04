@@ -14,15 +14,17 @@
 #include "./Menu/Screen.h"
 #include "Camera.h"
 #include "./Common/Settings.h"
+#include "./Loot/LootManager.h"
 class GlobalObjects
 {
 public:
     inline static std::vector<ObjectController> objects;
-    inline static ScreenManager* screenManager = new ScreenManager;
+    inline static std::unique_ptr<ScreenManager> screenManager = std::make_unique<ScreenManager>();
     inline static Camera *camera;
   //  inline static uint screenWidth = 800;
   //  inline static uint screenHeight = 600;
     inline static Settings *settings = new Settings;
+    inline static LootManager *lootManager = new LootManager;
 };
 
 #endif

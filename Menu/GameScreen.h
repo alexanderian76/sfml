@@ -10,6 +10,7 @@
 #include "../utils/utils.h"
 #include "../Sound/SoundScreen.h"
 #include "../consts.h"
+#include "../Loot/LootSelectionScreen.h"
 
 class GameScreen : public Screen
 {
@@ -248,6 +249,8 @@ public:
             {
                 // Пример тряски при атаке
                 GlobalObjects::camera->shake(8.f, 0.15f);
+              
+              
             }
             if (keyPressed->scancode == sf::Keyboard::Scancode::E)
             {
@@ -289,6 +292,11 @@ public:
             if (keyPressed->scancode == Keyboard::Scancode::Z)
             {
                 player.setMotion(0);
+            }
+
+            if(keyPressed->scancode == Keyboard::Scancode::R)
+            {
+                GlobalObjects::lootManager->generateLoot(player.sprite->getPosition(), EnemyType::BASIC);
             }
 
           /*  if(keyPressed->scancode == Keyboard::Scancode::M) {
@@ -374,6 +382,8 @@ public:
     void onEntered() override
     {
         GlobalObjects::screenManager->pushScreen(std::make_unique<SoundScreen>());
+        GlobalObjects::screenManager->pushScreen(std::make_unique<LootSelectionScreen>());
+       // GlobalObjects::lootManager->generateLoot(player.sprite->getPosition(), EnemyType::BASIC);
         std::cout << this->id << std::endl;
         std::cout << "Entered game screen" << std::endl;
     }
@@ -381,6 +391,7 @@ public:
     void onExit() override
     {
         GlobalObjects::screenManager->removeScreen((int)ScreenId::SOUND);
+         GlobalObjects::screenManager->removeScreen((int)ScreenId::LOOT);
         std::cout << "Exiting game screen" << std::endl;
     }
 

@@ -19,6 +19,7 @@ public:
     virtual void onExit() {}
     int screenType = 0;
     int id = 0;
+    bool isWindowActive = true;
 };
 
 // Менеджер экранов

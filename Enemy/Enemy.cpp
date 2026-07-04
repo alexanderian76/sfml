@@ -2,6 +2,10 @@
 #include <iostream>
 #include "../GlobalObjects.h"
 #include "../utils/utils.h"
+#include <stdio.h>
+#include "../Loot/LootSelectionScreen.h"
+#include "../Loot/LootManager.h"
+
 
 Enemy::Enemy(EnemyType type, sf::Vector2f startPos, sf::Texture &texture)
     : type(type), health(100), speed(100), damage(25), attackCooldown(1.0f), attackTimer(0)
@@ -9,7 +13,8 @@ Enemy::Enemy(EnemyType type, sf::Vector2f startPos, sf::Texture &texture)
     texturesRun = new Texture[8];
     for (int i = 0; i < 8; i++)
     {
-        if(!texturesRun[i].loadFromFile(getResourcePath() + "02_run/run_" + to_string(i + 1) + ".png")) {
+        if (!texturesRun[i].loadFromFile(getResourcePath() + "02_run/run_" + to_string(i + 1) + ".png"))
+        {
             std::cout << "Fail to load " << "02_run/run_" + to_string(i + 1) + ".png" << std::endl;
         }
     }
@@ -80,7 +85,6 @@ void Enemy::update(float deltaTime, const sf::Sprite &playerSprite)
     else
         damageTimer--;
 
-
     sprite->setTexture(texturesRun[j % 8]);
     // direction = 1;
     // flipRect(sprite);
@@ -89,7 +93,7 @@ void Enemy::update(float deltaTime, const sf::Sprite &playerSprite)
     sf::Vector2f direction = playerSprite.getPosition() - sprite->getPosition();
     float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
 
-    if(length > 200)
+    if (length > 200)
     {
         return;
     }
@@ -144,7 +148,8 @@ void Enemy::update(float deltaTime, const sf::Sprite &playerSprite)
             if (GlobalObjects::objects[i].checkCollision(sprite, xPadding, yPadding, directionY.y / abs(directionY.y), 0))
                 collisionsCount++;
         }
-        if (collisionsCount == 0) {
+        if (collisionsCount == 0)
+        {
             directionY.y = directionY.y / abs(directionY.y);
             sprite->move(directionY);
         }
@@ -179,6 +184,11 @@ void Enemy::takeDamage(float damage)
     // Эффект получения урона - мигание
     damageTimer = 6;
     sprite->setColor(sf::Color::Blue);
+
+    if (health <= 0)
+    {
+        onDeath(); // Вызываем генерацию лута
+    }
 }
 
 bool Enemy::checkCollision(sf::Sprite &sprite)
@@ -218,4 +228,11 @@ float Enemy::getMaxHealth() const
     default:
         return 100;
     }
+}
+
+void Enemy::onDeath()
+{
+    // Генерируем лут при смерти
+    GlobalObjects::lootManager->generateLoot(sprite->getPosition(), this->type);
+   // GlobalObjects::screenManager.toggleScreenVisibility((int)ScreenId::LOOT);
 }

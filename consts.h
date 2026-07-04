@@ -7,9 +7,17 @@ enum class ScreenId {
     MAIN_MENU,
     CUTSCENE,
     GAME,
-    SOUND
+    SOUND,
+    LOOT
 };
 
+enum class EnemyType
+{
+    BASIC,
+    FAST,
+    TANK,
+    RANGED
+};
 
 const float scale = 1.5;
 

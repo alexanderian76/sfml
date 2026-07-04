@@ -62,7 +62,7 @@ int main()
     // ScreenManager screenManager;
     std::cout << "HELLO" << std::endl;
     //  std::unique_ptr<MainMenuScreen> mainMenuScreen = make_unique<MainMenuScreen>();
-    GlobalObjects::screenManager->pushScreen(make_unique<MainMenuScreen>());
+    GlobalObjects::screenManager->pushScreen(std::make_unique<MainMenuScreen>());
 
     int j = 0;
     // Event appEvent;

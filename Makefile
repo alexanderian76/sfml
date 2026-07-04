@@ -1,5 +1,5 @@
 all:
-	g++ *.cpp ./utils/*.cpp ./Enemy/*.cpp -std=c++20 -lsfml-graphics -lsfml-network -lsfml-system -lsfml-window -lsfml-audio
+	g++ *.cpp ./Loot/*.cpp ./utils/*.cpp ./Enemy/*.cpp -std=c++20 -lsfml-graphics -lsfml-network -lsfml-system -lsfml-window -lsfml-audio
 
 	#g++ -c PlayerController.cpp -std=c++17 -lsfml-graphics -lsfml-network -lsfml-system -lsfml-window -lsfml-audio
 	#g++ -c ObjectController.cpp -std=c++17 -lsfml-graphics -lsfml-network -lsfml-system -lsfml-window -lsfml-audio

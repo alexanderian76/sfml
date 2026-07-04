@@ -11,6 +11,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Указание всех исходных файлов
 set(SOURCES
     main.cpp
+    ./Loot/LootManager.cpp
     GlobalObjects.cpp
     ObjectController.cpp
     PlayerController.cpp
@@ -18,6 +19,7 @@ set(SOURCES
     ./utils/utils.cpp
     ./Enemy/Enemy.cpp
     ./Enemy/EnemySpawner.cpp
+    
 )
 
 find_package(SFML COMPONENTS Graphics Window System Audio Network REQUIRED)
