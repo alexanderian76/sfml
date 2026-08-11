@@ -26,7 +26,7 @@ void EnemySpawner::update(float deltaTime, const sf::Sprite &playerSprite)
     // Удаление мертвых врагов
     enemies.erase(std::remove_if(enemies.begin(), enemies.end(),
                                  [](const std::unique_ptr<Enemy> &enemy)
-                                 { return !enemy->isAlive(); }),
+                                 { return !enemy->isExists; }),
                   enemies.end());
 }
 

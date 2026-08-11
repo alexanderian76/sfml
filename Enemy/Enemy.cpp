@@ -6,7 +6,6 @@
 #include "../Loot/LootSelectionScreen.h"
 #include "../Loot/LootManager.h"
 
-
 Enemy::Enemy(EnemyType type, sf::Vector2f startPos, sf::Texture &texture)
     : type(type), health(100), speed(100), damage(25), attackCooldown(1.0f), attackTimer(0)
 {
@@ -77,84 +76,91 @@ sf::Color Enemy::getColorForType()
 void Enemy::update(float deltaTime, const sf::Sprite &playerSprite)
 {
     int j = deltaTime / 0.07f;
-    if (attackTimer > 0)
-        attackTimer -= deltaTime;
-
-    if (damageTimer == 0)
-        sprite->setColor(getColorForType());
-    else
-        damageTimer--;
-
-    sprite->setTexture(texturesRun[j % 8]);
-    // direction = 1;
-    // flipRect(sprite);
-
-    // Движение к игроку
-    sf::Vector2f direction = playerSprite.getPosition() - sprite->getPosition();
-    float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
-
-    if (length > 200)
+    if (this->isAlive())
     {
-        return;
-    }
+        if (attackTimer > 0)
+            attackTimer -= deltaTime;
 
-    if (length > 0 && !FloatRect(sprite->getPosition(), {xPadding, yPadding}).findIntersection(FloatRect(playerSprite.getPosition(), {xPadding, yPadding})))
-    {
-
-        int collisionsCountX = 0, collisionsCountY = 0;
-        for (int i = 0; i < GlobalObjects::objects.size(); i++)
-        {
-            if (GlobalObjects::objects[i].checkCollision(sprite, xPadding, yPadding, 0, direction.x / abs(direction.x)))
-                collisionsCountX++;
-            if (GlobalObjects::objects[i].checkCollision(sprite, xPadding, yPadding, direction.y / abs(direction.y), 0))
-                collisionsCountY++;
-        }
-
-        if (abs(direction.x) >= abs(direction.y) && collisionsCountX == 0)
-        {
-            direction.x = direction.x / abs(direction.x);
-            direction.y = 0;
-        }
-        else if (abs(direction.x) <= abs(direction.y) && collisionsCountY == 0)
-        {
-            direction.y = direction.y / abs(direction.y);
-            direction.x = 0;
-        }
-        else if (abs(direction.x) <= abs(direction.y) && collisionsCountX == 0)
-        {
-            direction.x = direction.x / abs(direction.x);
-            direction.y = 0;
-        }
-        else if (abs(direction.x) >= abs(direction.y) && collisionsCountY == 0)
-        {
-            direction.y = direction.y / abs(direction.y);
-            direction.x = 0;
-        }
-
+        if (damageTimer == 0)
+            sprite->setColor(getColorForType());
         else
-        {
-            direction.x = 0;
-            direction.y = 0;
-        }
-        if (direction.x != 0 || direction.y != 0)
-            sprite->move(direction);
-    }
-    else if (sprite->getPosition().y != playerSprite.getPosition().y)
-    {
-        sf::Vector2f directionY = {0, playerSprite.getPosition().y - sprite->getPosition().y};
-        int collisionsCount = 0;
-        for (int i = 0; i < GlobalObjects::objects.size(); i++)
-        {
-            if (GlobalObjects::objects[i].checkCollision(sprite, xPadding, yPadding, directionY.y / abs(directionY.y), 0))
-                collisionsCount++;
-        }
-        if (collisionsCount == 0)
-        {
-            directionY.y = directionY.y / abs(directionY.y);
-            sprite->move(directionY);
-        }
-    }
+            damageTimer--;
 
+        sprite->setTexture(texturesRun[j % 8]);
+        // direction = 1;
+        // flipRect(sprite);
+
+        // Движение к игроку
+        sf::Vector2f direction = playerSprite.getPosition() - sprite->getPosition();
+        float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
+
+        if (length > 200)
+        {
+            return;
+        }
+
+        if (length > 0 && !FloatRect(sprite->getPosition(), {xPadding, yPadding}).findIntersection(FloatRect(playerSprite.getPosition(), {xPadding, yPadding})))
+        {
+
+            int collisionsCountX = 0, collisionsCountY = 0;
+            for (int i = 0; i < GlobalObjects::objects.size(); i++)
+            {
+                if (GlobalObjects::objects[i].checkCollision(sprite, xPadding, yPadding, 0, direction.x / abs(direction.x)))
+                    collisionsCountX++;
+                if (GlobalObjects::objects[i].checkCollision(sprite, xPadding, yPadding, direction.y / abs(direction.y), 0))
+                    collisionsCountY++;
+            }
+
+            if (abs(direction.x) >= abs(direction.y) && collisionsCountX == 0)
+            {
+                direction.x = direction.x / abs(direction.x);
+                direction.y = 0;
+            }
+            else if (abs(direction.x) <= abs(direction.y) && collisionsCountY == 0)
+            {
+                direction.y = direction.y / abs(direction.y);
+                direction.x = 0;
+            }
+            else if (abs(direction.x) <= abs(direction.y) && collisionsCountX == 0)
+            {
+                direction.x = direction.x / abs(direction.x);
+                direction.y = 0;
+            }
+            else if (abs(direction.x) >= abs(direction.y) && collisionsCountY == 0)
+            {
+                direction.y = direction.y / abs(direction.y);
+                direction.x = 0;
+            }
+
+            else
+            {
+                direction.x = 0;
+                direction.y = 0;
+            }
+            if (direction.x != 0 || direction.y != 0)
+                sprite->move(direction);
+        }
+        else if (sprite->getPosition().y != playerSprite.getPosition().y)
+        {
+            sf::Vector2f directionY = {0, playerSprite.getPosition().y - sprite->getPosition().y};
+            int collisionsCount = 0;
+            for (int i = 0; i < GlobalObjects::objects.size(); i++)
+            {
+                if (GlobalObjects::objects[i].checkCollision(sprite, xPadding, yPadding, directionY.y / abs(directionY.y), 0))
+                    collisionsCount++;
+            }
+            if (collisionsCount == 0)
+            {
+                directionY.y = directionY.y / abs(directionY.y);
+                sprite->move(directionY);
+            }
+        }
+    }
+    else
+    {
+        sprite->setTexture(texturesRun[7]);
+        sprite->setColor(sf::Color::Blue);
+    }
     // float angle = std::atan2(direction.y, direction.x) * 180 / 3.14159f;
     // sprite->setRotation(sf::degrees(angle + 90.f)); // Используем sf::degrees(
 }
@@ -177,17 +183,20 @@ void Enemy::draw(sf::RenderWindow &window)
 
 void Enemy::takeDamage(float damage)
 {
-    health -= damage;
-    if (health < 0)
-        health = 0;
-
-    // Эффект получения урона - мигание
-    damageTimer = 6;
-    sprite->setColor(sf::Color::Blue);
-
-    if (health <= 0)
+    if (this->isAlive())
     {
-        onDeath(); // Вызываем генерацию лута
+        health -= damage;
+        if (health < 0)
+            health = 0;
+
+        // Эффект получения урона - мигание
+        damageTimer = 6;
+        sprite->setColor(sf::Color::Blue);
+
+        if (health <= 0)
+        {
+            onDeath(); // Вызываем генерацию лута
+        }
     }
 }
 
@@ -234,5 +243,5 @@ void Enemy::onDeath()
 {
     // Генерируем лут при смерти
     GlobalObjects::lootManager->generateLoot(sprite->getPosition(), this->type);
-   // GlobalObjects::screenManager.toggleScreenVisibility((int)ScreenId::LOOT);
+    // GlobalObjects::screenManager.toggleScreenVisibility((int)ScreenId::LOOT);
 }

@@ -16,6 +16,7 @@ public:
     void draw(sf::RenderWindow &window);
     void takeDamage(float damage);
     bool isAlive() const { return health > 0; }
+    bool isExists = true;
 
     sf::FloatRect getGlobalBounds() const;
     sf::Vector2f getPosition() const;
