@@ -33,6 +33,7 @@ target_link_libraries(${PROJECT_NAME}
     sfml-system
     sfml-audio
     sfml-network
+    tbb
 )
 
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets/ 

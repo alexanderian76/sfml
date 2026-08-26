@@ -346,6 +346,7 @@ public:
         }
         window.draw(*background);
 
+        
         for (int i = 0; i < GlobalObjects::objects.size(); i++)
         {
             window.draw(GlobalObjects::objects[i].drawObject());

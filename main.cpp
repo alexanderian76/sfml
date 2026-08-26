@@ -163,7 +163,8 @@ int main()
                 }
                 else if (keyPressed->code == sf::Keyboard::Key::Z)
                 {
-                    GlobalObjects::screenManager->pushScreen(make_unique<Cutscene>("TestName", font, 36));
+                    if(GlobalObjects::screenManager->findScreenById((int)ScreenId::CUTSCENE) == nullptr)
+                        GlobalObjects::screenManager->pushScreen(make_unique<Cutscene>("TestName", font, 36));
                 }
             }
         }

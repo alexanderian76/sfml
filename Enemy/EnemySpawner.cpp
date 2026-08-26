@@ -2,6 +2,7 @@
 #include <random>
 #include <cmath>
 #include <algorithm>
+#include <execution>
 
 EnemySpawner::EnemySpawner(sf::Texture &enemyTexture)
     : enemyTexture(enemyTexture), spawnTimer(0), spawnRate(2.0f), maxEnemies(10) {}
@@ -18,10 +19,13 @@ void EnemySpawner::update(float deltaTime, const sf::Sprite &playerSprite)
     }
 
     // Обновление всех врагов
-    for (auto &enemy : enemies)
+   /* for (auto &enemy : enemies)
     {
-        enemy->update(deltaTime, playerSprite);
-    }
+       enemy->update(deltaTime, playerSprite);
+    }*/
+    std::for_each(std::execution::par, enemies.begin(), enemies.end(), [&deltaTime, &playerSprite](auto &enemy) {
+        enemy->update(deltaTime, playerSprite); // Executed in parallel across available cores
+    });
 
     // Удаление мертвых врагов
     enemies.erase(std::remove_if(enemies.begin(), enemies.end(),
