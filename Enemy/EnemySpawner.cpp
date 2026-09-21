@@ -1,8 +1,15 @@
 #include "EnemySpawner.h"
 #include <random>
 #include <cmath>
+
+#if defined(__APPLE__)
+#include <oneapi/dpl/execution>
+#include <oneapi/dpl/algorithm>
+#else
 #include <algorithm>
 #include <execution>
+#endif
+
 
 EnemySpawner::EnemySpawner(sf::Texture &enemyTexture)
     : enemyTexture(enemyTexture), spawnTimer(0), spawnRate(2.0f), maxEnemies(10) {}

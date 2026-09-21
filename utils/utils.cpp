@@ -14,7 +14,7 @@ std::string getResourcePath()
     CFURLGetFileSystemRepresentation(resourcesURL, TRUE, (UInt8 *)path, PATH_MAX);
     CFRelease(resourcesURL);
 
-    return std::string(path) + "/";
+    return std::string(path) + "/assets/";
 #endif
     return "assets/";
 }

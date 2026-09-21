@@ -27,6 +27,17 @@ find_package(SFML COMPONENTS Graphics Window System Audio Network REQUIRED)
 # Создание исполняемого файла
 add_executable(${PROJECT_NAME} ${SOURCES})
 
+if(APPLE)
+target_link_libraries(${PROJECT_NAME}
+    sfml-graphics
+    sfml-window
+    sfml-system
+    sfml-audio
+    sfml-network
+    tbb
+    "-framework CoreFoundation"
+)
+else()
 target_link_libraries(${PROJECT_NAME}
     sfml-graphics
     sfml-window
@@ -35,6 +46,7 @@ target_link_libraries(${PROJECT_NAME}
     sfml-network
     tbb
 )
+endif()
 
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets/ 
      DESTINATION ${CMAKE_BINARY_DIR}/assets)
