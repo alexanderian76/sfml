@@ -62,7 +62,7 @@ int main()
     // ScreenManager screenManager;
     std::cout << "HELLO" << std::endl;
     //  std::unique_ptr<MainMenuScreen> mainMenuScreen = make_unique<MainMenuScreen>();
-    GlobalObjects::screenManager->pushScreen(std::make_unique<MainMenuScreen>());
+    GlobalObjects::screenManager->pushScreen(new MainMenuScreen);
 
     int j = 0;
     // Event appEvent;
@@ -157,14 +157,14 @@ int main()
                         }
                         else
                         {
-                            GlobalObjects::screenManager->pushScreen(make_unique<MainMenuScreen>());
+                            GlobalObjects::screenManager->pushScreen(new MainMenuScreen);
                         }
                     }
                 }
                 else if (keyPressed->code == sf::Keyboard::Key::Z)
                 {
                     if(GlobalObjects::screenManager->findScreenById((int)ScreenId::CUTSCENE) == nullptr)
-                        GlobalObjects::screenManager->pushScreen(make_unique<Cutscene>("TestName", font, 36));
+                        GlobalObjects::screenManager->pushScreen(new Cutscene("TestName", font, 36));
                 }
             }
         }

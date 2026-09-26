@@ -382,8 +382,8 @@ public:
 
     void onEntered() override
     {
-        GlobalObjects::screenManager->pushScreen(std::make_unique<SoundScreen>());
-        GlobalObjects::screenManager->pushScreen(std::make_unique<LootSelectionScreen>());
+        GlobalObjects::screenManager->pushScreen(new SoundScreen);
+        GlobalObjects::screenManager->pushScreen(new LootSelectionScreen);
        // GlobalObjects::lootManager->generateLoot(player.sprite->getPosition(), EnemyType::BASIC);
         std::cout << this->id << std::endl;
         std::cout << "Entered game screen" << std::endl;

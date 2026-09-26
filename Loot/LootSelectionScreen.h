@@ -9,14 +9,12 @@
 #include "../utils/utils.h"
 #include <iostream>
 
-
-
 class LootSelectionScreen : public Screen
 {
 public:
     LootSelectionScreen()
     {
-        
+
         id = (int)ScreenId::LOOT; // Уникальный ID для окна лута
         screenType = 2;           // Тип экрана (2 - UI окно)
         isWindowActive = false;
@@ -28,20 +26,27 @@ public:
         }
         this->titleText = new sf::Text(font);
         this->controlsText = new sf::Text(font);
-        setOnItemSelected([this](const LootItem& item) {
-        // Применяем эффект выбранного предмета
-        std::cout << "Selected item: " << item.name << std::endl;
-        // Здесь можно добавить логику применения предмета
-        // Например, к игроку или инвентарю
-    });
-         std::cout << "LootSelectionScreen INITED" << std::endl;
+
+        this->selectionArrowText = new sf::Text(font);
+        selectionArrowText->setString(">>");
+        selectionArrowText->setCharacterSize(20);
+        selectionArrowText->setFillColor(sf::Color::Yellow);
+
+        setOnItemSelected([this](const LootItem &item)
+                          {
+                              // Применяем эффект выбранного предмета
+                              std::cout << "Selected item: " << item.name << std::endl;
+                              // Здесь можно добавить логику применения предмета
+                              // Например, к игроку или инвентарю
+                          });
+        std::cout << "LootSelectionScreen INITED" << std::endl;
     }
 
     void show(const sf::Vector2f &position)
     {
-     //   std::cout << "LootSelectionScreen SHOW" << std::endl;
-       // this->items = items;
-        
+        //   std::cout << "LootSelectionScreen SHOW" << std::endl;
+        // this->items = items;
+
         fadeTimer = 0.3f;
         windowPosition = position - sf::Vector2f(150, 100);
         selectedItemIndex = 0; // Выбираем первый предмет по умолчанию
@@ -67,7 +72,7 @@ public:
     // Реализация виртуальных методов Screen
     void handleInput(const sf::Event &event, sf::RenderWindow &window) override
     {
-   //      std::cout << "LootSelectionScreen INPUT" << std::endl;
+        //      std::cout << "LootSelectionScreen INPUT" << std::endl;
         if (!isWindowActive)
             return;
 
@@ -117,7 +122,7 @@ public:
     };
     void update(sf::Time deltaTime) override
     {
-   //     std::cout << "LootSelectionScreen UPDATE" << std::endl;
+        //     std::cout << "LootSelectionScreen UPDATE" << std::endl;
         if (!isWindowActive)
             return;
 
@@ -159,7 +164,7 @@ public:
 
     void draw(sf::RenderWindow &window) override
     {
-   //     std::cout << "LootSelectionScreen DRAW" << std::endl;
+        //     std::cout << "LootSelectionScreen DRAW" << std::endl;
         if (!isWindowActive)
             return;
 
@@ -174,22 +179,17 @@ public:
         window.draw(*controlsText);
 
         // Рисуем кнопки и текст
-        for (size_t i = 0; i < itemButtons->size() && i < itemTexts->size(); i++)
+        for (size_t i = 0; i < itemButtons.size() && i < itemTexts.size(); i++)
         {
-            window.draw((*itemButtons)[i]);
-            window.draw((*itemTexts)[i]);
+            window.draw(*(itemButtons)[i]);
+            window.draw(*(itemTexts)[i]);
         }
 
         // Добавляем маленькую стрелку у выбранного предмета
-        if (selectedItemIndex >= 0 && selectedItemIndex < static_cast<int>(itemButtons->size()))
+        if (selectedItemIndex >= 0 && selectedItemIndex < static_cast<int>(itemButtons.size()))
         {
-            sf::Text arrow(font);
-
-            arrow.setString(">>");
-            arrow.setCharacterSize(20);
-            arrow.setFillColor(sf::Color::Yellow);
-            arrow.setPosition((*itemButtons)[selectedItemIndex].getPosition() - sf::Vector2f(20, 5));
-            window.draw(arrow);
+            selectionArrowText->setPosition((itemButtons)[selectedItemIndex]->getPosition() - sf::Vector2f(20, 5));
+            window.draw(*selectionArrowText);
         }
     };
     void onEnter() override
@@ -201,38 +201,41 @@ public:
         this->items.clear();
 
         std::for_each(GlobalObjects::lootManager->lootItems.begin(), GlobalObjects::lootManager->lootItems.end(), [this](LootItem &s)
-                          { this->items.push_back(s); });
+                      { this->items.push_back(s); });
 
         std::cout << "LootSelectionScreen ITEMS " << this->items.size() << std::endl;
-        
+
         show(GlobalObjects::lootManager->currentPos);
     };
-    void onEntered() override {
-         std::cout << "LootSelectionScreen entered" << std::endl;
+    void onEntered() override
+    {
+        std::cout << "LootSelectionScreen entered" << std::endl;
     }
     void onExit() override
     {
         std::cout << "LootSelectionScreen exited" << std::endl;
         isWindowActive = false;
         items.clear();
-        itemButtons->clear();
-        itemTexts->clear();
-        selectedItemIndex = -1;
+        itemButtons.clear();
+        itemTexts.clear();
+        selectedItemIndex = 0;
     };
     ~LootSelectionScreen() override
     {
         std::cout << "LootSelectionScreen DELETE" << std::endl;
         delete titleText;
         delete controlsText;
+        delete selectionArrowText;
     }
 
 private:
     std::vector<LootItem> items;
-    std::vector<sf::RectangleShape> *itemButtons = new std::vector<sf::RectangleShape>;
-    std::vector<sf::Text> *itemTexts = new std::vector<sf::Text>;
+    std::vector<sf::RectangleShape *> itemButtons;
+    std::vector<sf::Text *> itemTexts;
     sf::RectangleShape background;
     sf::Text *titleText;
     sf::Text *controlsText;
+    sf::Text *selectionArrowText;
     sf::Font font;
     float fadeTimer = 0;
     sf::Vector2f windowPosition;
@@ -245,25 +248,26 @@ private:
 
     void createUI()
     {
-     //    std::cout << "LootSelectionScreen CREATE UI" << std::endl;
-        itemButtons->clear();
-        itemTexts->clear();
+        //    std::cout << "LootSelectionScreen CREATE UI" << std::endl;
 
+        itemButtons.clear();
+        itemTexts.clear();
+        std::cout << "CLEAR" << std::endl;
         // Фон окна
         background.setSize(sf::Vector2f(300, 80 + items.size() * 45));
         background.setFillColor(sf::Color(30, 30, 30, 230));
         background.setOutlineThickness(2);
         background.setOutlineColor(sf::Color::White);
         background.setPosition(windowPosition);
-std::cout << "LootSelectionScreen CREATE UI 1" << std::endl;
+        std::cout << "LootSelectionScreen CREATE UI 1" << std::endl;
         // Заголовок
         // titleText->setFont(font);
         titleText->setString("Select an item:");
         titleText->setCharacterSize(18);
         titleText->setFillColor(sf::Color::White);
         titleText->setPosition(windowPosition + sf::Vector2f(20, 15));
-        
-std::cout << "LootSelectionScreen CREATE UI 2" << std::endl;
+
+        std::cout << "LootSelectionScreen CREATE UI 2" << std::endl;
         // Управление клавишами
         // controlsText->setFont(font);
         controlsText->setString("Arrows to navigate  [SPACE/ENTER] to select  [ESC] to cancel");
@@ -274,23 +278,23 @@ std::cout << "LootSelectionScreen CREATE UI 2" << std::endl;
         // Создаем кнопки для каждого предмета
         for (size_t i = 0; i < items.size(); i++)
         {
-            sf::RectangleShape button(sf::Vector2f(260, 35));
+            sf::RectangleShape *button = new sf::RectangleShape(sf::Vector2f(260, 35));
 
             // Выделяем выбранный предмет
             if (i == static_cast<size_t>(selectedItemIndex))
             {
-                button.setFillColor(sf::Color::White);
+                button->setFillColor(sf::Color::White);
             }
             else
             {
-                button.setFillColor(items[i].color);
+                button->setFillColor(items[i].color);
             }
 
-            button.setPosition(windowPosition + sf::Vector2f(20, 70 + i * 40));
-            button.setOutlineThickness(1);
-            button.setOutlineColor(sf::Color::White);
+            button->setPosition(windowPosition + sf::Vector2f(20, 70 + i * 40));
+            button->setOutlineThickness(1);
+            button->setOutlineColor(sf::Color::White);
 
-            sf::Text text(font);
+            sf::Text *text = new sf::Text(font);
 
             std::string itemText = items[i].name + " - " + items[i].description;
             if (items[i].type == LootType::HEALTH_POTION || items[i].type == LootType::MANA_POTION)
@@ -310,23 +314,23 @@ std::cout << "LootSelectionScreen CREATE UI 2" << std::endl;
                 itemText += " (+" + std::to_string((int)items[i].value) + " XP)";
             }
 
-            text.setString(itemText);
-            text.setCharacterSize(14);
+            text->setString(itemText);
+            text->setCharacterSize(14);
 
             // Если предмет выбран, текст черный, иначе белый
             if (i == static_cast<size_t>(selectedItemIndex))
             {
-                text.setFillColor(sf::Color::Black);
+                text->setFillColor(sf::Color::Black);
             }
             else
             {
-                text.setFillColor(sf::Color::White);
+                text->setFillColor(sf::Color::White);
             }
 
-            text.setPosition(button.getPosition() + sf::Vector2f(10, 8));
+            text->setPosition(button->getPosition() + sf::Vector2f(10, 8));
 
-            itemButtons->push_back(button);
-            itemTexts->push_back(text);
+            itemButtons.push_back(button);
+            itemTexts.push_back(text);
         }
     };
 
@@ -334,8 +338,8 @@ std::cout << "LootSelectionScreen CREATE UI 2" << std::endl;
     {
         if (index < 0 || index >= static_cast<int>(items.size()))
             return;
-
         selectedItemIndex = index;
+        std::cout << "SELECT" << std::endl;
         createUI(); // Пересоздаем UI для обновления выделения
     };
 

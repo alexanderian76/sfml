@@ -1,6 +1,7 @@
 // Screen.hpp
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <algorithm>
 #include <memory>
 #include <stack>
 #include <iostream>
@@ -10,7 +11,7 @@
 class Screen
 {
 public:
-    virtual ~Screen() = default;
+    virtual ~Screen() { std::cout << "SCREEN ~~~~~" << std::endl; };
     virtual void handleInput(const sf::Event &event, sf::RenderWindow &window) = 0;
     virtual void update(sf::Time deltaTime) = 0;
     virtual void draw(sf::RenderWindow &window) = 0;
@@ -26,13 +27,15 @@ public:
 class ScreenManager
 {
 private:
-    std::vector<std::unique_ptr<Screen>> screens;
+    std::vector<Screen *> screens;
 
 public:
-    void pushScreen(std::unique_ptr<Screen> screen)
+    void pushScreen(Screen *screen)
     {
         std::cout << "PUSH_SCREEN" << std::endl;
         int id = screen->id;
+        if (findScreenById(id) != nullptr)
+            return;
         if (!screens.empty())
         {
             // screens.back()->onExit();
@@ -63,10 +66,10 @@ public:
         if (!screens.empty())
         {
 
-            auto resultScreen = std::find_if(screens.begin(), screens.end(), [id](std::unique_ptr<Screen> &s)
+            auto resultScreen = std::find_if(screens.begin(), screens.end(), [id](Screen *s)
                                              { return s->id == id; });
             if (screens.end() != resultScreen)
-                return resultScreen->get();
+                return resultScreen[0];
         }
         return nullptr;
     }
@@ -76,12 +79,13 @@ public:
         if (!screens.empty())
         {
             // screens.at(0)->onExit();
-            auto tmpScreen = std::find_if(screens.begin(), screens.end(), [id](std::unique_ptr<Screen> &s)
+            auto tmpScreen = std::find_if(screens.begin(), screens.end(), [id](Screen *s)
                                           { return s->id == id; });
-            if (tmpScreen->get())
+            if (tmpScreen[0])
             {
-                tmpScreen->get()->onExit();
-                std::erase_if(screens, [id](std::unique_ptr<Screen> &s)
+                tmpScreen[0]->onExit();
+
+                std::erase_if(screens, [id](const Screen *s)
                               { return s->id == id; });
             }
         }
@@ -91,7 +95,7 @@ public:
     {
         if (!screens.empty())
         {
-            std::for_each(screens.begin(), screens.end(), [event, &window](std::unique_ptr<Screen> &s)
+            std::for_each(screens.begin(), screens.end(), [event, &window](Screen *s)
                           { s->handleInput(event, window); });
         }
     }
@@ -100,7 +104,7 @@ public:
     {
         if (!screens.empty())
         {
-            std::for_each(screens.begin(), screens.end(), [&deltaTime](std::unique_ptr<Screen> &s)
+            std::for_each(screens.begin(), screens.end(), [&deltaTime](Screen *s)
                           { s->update(deltaTime); });
             // screens.back()->update(deltaTime);
         }
@@ -110,7 +114,7 @@ public:
     {
         if (!screens.empty())
         {
-            std::for_each(screens.begin(), screens.end(), [&window](std::unique_ptr<Screen> &s)
+            std::for_each(screens.begin(), screens.end(), [&window](Screen *s)
                           { s->draw(window); });
             //  screens.back()->draw(window);
         }

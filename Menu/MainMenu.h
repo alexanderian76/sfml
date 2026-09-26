@@ -31,7 +31,7 @@ public:
             std::cout << "Starting game..." << std::endl;
             GlobalObjects::screenManager->removeScreen((int)ScreenId::MAIN_MENU);
             GlobalObjects::screenManager->removeScreen((int)ScreenId::GAME);
-            GlobalObjects::screenManager->pushScreen(std::make_unique<GameScreen>());
+            GlobalObjects::screenManager->pushScreen(new GameScreen);
 
         });
         
@@ -80,5 +80,11 @@ public:
     
     void handleMenuInput(const sf::Event& event, sf::RenderWindow& window) {
         menu.handleInput(event);
+    }
+        ~MainMenuScreen() override
+    {
+
+        std::cout << "DELETE MENU SCREEN" << std::endl;
+
     }
 };
